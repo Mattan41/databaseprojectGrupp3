@@ -5,7 +5,7 @@
     <persistence-unit name="jpa-hibernate-mysql">
         <properties>
             <!-- Database connection settings -->
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/test"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/planets"/>
             <property name="jakarta.persistence.jdbc.user" value="root"/>
             <property name="jakarta.persistence.jdbc.password" value="password"/>
             <!-- Automatically export the schema -->

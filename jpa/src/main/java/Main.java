@@ -1,3 +1,4 @@
+import com.example.entities.Student;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -19,10 +20,10 @@ public class Main {
             return;
         }
 
-        TypedQuery<Country> query = em.createQuery("SELECT c FROM Country c WHERE c.countryName = :name", Country.class);
+        TypedQuery<Student> query = em.createQuery("SELECT c FROM Student c WHERE c.studentName = :name", Student.class);
         query.setParameter("name", name);
-        List<Country> countries = query.getResultList();
-        countries.forEach(System.out::println);
+        List<Student> students = query.getResultList();
+        students.forEach(System.out::println);
 
         em.close();
     }
