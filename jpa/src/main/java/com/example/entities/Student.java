@@ -3,7 +3,7 @@ package com.example.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "student", schema = "planeter")
+@Table(name = "student", schema = "planets")
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,6 +15,12 @@ public class Student {
 
     @Column(name = "studentName", length = 50)
     private String studentName;
+
+    @Column(name = "age")
+    private Integer age;
+
+    @Column(name = "totResult")
+    private Double totResult;
 
     public Integer getId() {
         return id;
@@ -40,12 +46,30 @@ public class Student {
         this.studentName = studentName;
     }
 
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public Double getTotResult() {
+        return totResult;
+    }
+
+    public void setTotResult(Double totResult) {
+        this.totResult = totResult;
+    }
+
     @Override
     public String toString() {
         return "Student{" +
                "id=" + id +
                ", studentSocialSecNum=" + studentSocialSecNum +
                ", studentName='" + studentName + '\'' +
+               ", age=" + age +
+               ", totResult=" + totResult +
                '}';
     }
 }
