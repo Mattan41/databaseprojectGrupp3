@@ -10,3 +10,10 @@ CREATE TABLE planet (
 
 );
 
+CREATE TABLE moon(
+                     moonId INT NOT NULL AUTO_INCREMENT,
+                     name varchar(100) not null,
+                     size DOUBLE,
+                     planetId int not null,
+                     FOREIGN KEY (planetId) references planet
+);
