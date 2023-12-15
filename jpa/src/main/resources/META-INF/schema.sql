@@ -7,5 +7,6 @@ CREATE TABLE planet (
                          planetSid INT,
                          PRIMARY KEY (planetId),
                          FOREIGN KEY (planetMid) REFERENCES moon(planetMid),
+
 );
 
