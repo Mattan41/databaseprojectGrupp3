@@ -4,11 +4,7 @@ CREATE TABLE planet
     planetName VARCHAR(255),
     planetSize INT,
     planetType VARCHAR(255),
-    planetMid  INT,
-    planetSid  INT,
-    PRIMARY KEY (planetId),
-    FOREIGN KEY (planetMid) REFERENCES moon (planetMid),
-
+    PRIMARY KEY (planetId)
 );
 
 CREATE TABLE moon
