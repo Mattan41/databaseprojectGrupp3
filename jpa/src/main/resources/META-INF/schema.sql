@@ -13,14 +13,7 @@ CREATE TABLE planet
     planetType    VARCHAR(255),
     SolarSystemId INT,
     PRIMARY KEY (planetId),
-    FOREIGN KEY (SolarSystemId) REFERENCES SolarSystemId (SolarSystemId)
-);
-
-CREATE TABLE SolarSystemId
-(
-    SolarSystemId   INT NOT NULL AUTO_INCREMENT,
-    SolarSystemName VARCHAR(255) not null unique,
-    GalaxyName      VARCHAR(255)
+    FOREIGN KEY (SolarSystemId) REFERENCES SolarSystem (SolarSystemId)
 );
 
 CREATE TABLE moon

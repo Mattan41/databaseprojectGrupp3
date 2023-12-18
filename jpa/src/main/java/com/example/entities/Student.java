@@ -2,6 +2,9 @@ package com.example.entities;
 
 import jakarta.persistence.*;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "student", schema = "planets")
 public class Student {
@@ -10,17 +13,20 @@ public class Student {
     @Column(name = "studentId", nullable = false)
     private Integer id;
 
-    @Column(name = "studentSocialSecNum")
+    @Column(name = "studentSocialSecNum", nullable = false)
     private Integer studentSocialSecNum;
 
     @Column(name = "studentName", length = 50)
     private String studentName;
 
-    @Column(name = "age")
-    private Integer age;
+    @Column(name = "studentAge")
+    private Integer studentAge;
 
     @Column(name = "totResult")
     private Double totResult;
+
+    @OneToMany(mappedBy = "studentTest")
+    private Set<Test> tests = new LinkedHashSet<>();
 
     public Integer getId() {
         return id;
@@ -46,12 +52,12 @@ public class Student {
         this.studentName = studentName;
     }
 
-    public Integer getAge() {
-        return age;
+    public Integer getStudentAge() {
+        return studentAge;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
+    public void setStudentAge(Integer studentAge) {
+        this.studentAge = studentAge;
     }
 
     public Double getTotResult() {
@@ -62,14 +68,12 @@ public class Student {
         this.totResult = totResult;
     }
 
-    @Override
-    public String toString() {
-        return "Student{" +
-               "id=" + id +
-               ", studentSocialSecNum=" + studentSocialSecNum +
-               ", studentName='" + studentName + '\'' +
-               ", age=" + age +
-               ", totResult=" + totResult +
-               '}';
+    public Set<Test> getTests() {
+        return tests;
     }
+
+    public void setTests(Set<Test> tests) {
+        this.tests = tests;
+    }
+
 }
