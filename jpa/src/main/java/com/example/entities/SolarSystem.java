@@ -40,4 +40,8 @@ public class SolarSystem {
         this.galaxyName = galaxyName;
     }
 
+    @Override
+    public String toString() {
+        return solarSystemName;
+    }
 }

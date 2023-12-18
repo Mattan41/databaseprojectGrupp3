@@ -40,4 +40,8 @@ public class Moon {
         this.size = size;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

@@ -65,7 +65,7 @@ public class Main {
     }
     public static void moonMenu(){
         var moonMenu = new Menu("Moon Menu!");
-        moonMenu.addMenuItem("1 - Show all moons", () -> System.out.println("show all!"));
+        moonMenu.addMenuItem("1 - Show all moons", Read::showAllMoons);
         moonMenu.addMenuItem("2 - Insert a new moon", () -> System.out.println("insert!"));
         moonMenu.addMenuItem("3 - Update a moon", () -> System.out.println("update!"));
         moonMenu.addMenuItem("4 - Delete a moon", () -> System.out.println("delete"));
@@ -73,7 +73,7 @@ public class Main {
     }
     public static void solarSystemMenu(){
         var solarSystemMenu = new Menu("Solar system Menu!");
-        solarSystemMenu.addMenuItem("1 - Show all solar systems", () -> System.out.println("show all!"));
+        solarSystemMenu.addMenuItem("1 - Show all solar systems", Read::showAllSolarSystems);
         solarSystemMenu.addMenuItem("2 - Insert a new solar system", () -> System.out.println("insert!"));
         solarSystemMenu.addMenuItem("3 - Update a solar system", () -> System.out.println("update!"));
         solarSystemMenu.addMenuItem("4 - Delete a solar system", () -> System.out.println("delete"));

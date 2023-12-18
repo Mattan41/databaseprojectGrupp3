@@ -52,4 +52,13 @@ public class Test {
         this.studentTest = studentTest;
     }
 
+    @Override
+    public String toString() {
+        return "Test{" +
+                "id=" + id +
+                ", testName='" + testName + '\'' +
+                ", testScore=" + testScore +
+                ", studentTest=" + studentTest +
+                '}';
+    }
 }
