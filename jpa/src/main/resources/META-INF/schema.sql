@@ -1,27 +1,29 @@
+CREATE TABLE SolarSystem
+(
+    SolarSystemId   INT          NOT NULL AUTO_INCREMENT,
+    SolarSystemName VARCHAR(255) not null unique,
+    GalaxyName      VARCHAR(255),
+    primary key (SolarSystemId)
+);
 CREATE TABLE planet
 (
-    planetId   INT NOT NULL AUTO_INCREMENT,
-    planetName VARCHAR(255),
-    planetSize INT,
-    planetType VARCHAR(255),
+    planetId      INT NOT NULL AUTO_INCREMENT,
+    planetName    VARCHAR(255),
+    planetSize    INT,
+    planetType    VARCHAR(255),
     SolarSystemId INT,
     PRIMARY KEY (planetId),
     FOREIGN KEY (SolarSystemId) REFERENCES SolarSystemId (SolarSystemId)
 );
 
-CREATE TABLE SolarSystemId
-(
-    SolarSystemId   INT NOT NULL AUTO_INCREMENT,
-    SolarSystemName VARCHAR(255) not null unique,
-    GalaxyName      VARCHAR(255)
-);
+
 
 CREATE TABLE moon
 (
-    moonId   INT NOT NULL AUTO_INCREMENT,
+    moonId   INT          NOT NULL AUTO_INCREMENT,
     name     varchar(100) not null unique,
     size     DOUBLE,
-    planetId INT unique not null,
+    planetId INT unique   not null,
     PRIMARY KEY (moonId),
     foreign key (planetId) references planet (planetId)
 );
@@ -39,8 +41,8 @@ CREATE TABLE student
 
 CREATE TABLE test
 (
-    testId        INT NOT NULL UNIQUE AUTO_INCREMENT,
-    testName      VARCHAR(50) not null ,
+    testId        INT         NOT NULL UNIQUE AUTO_INCREMENT,
+    testName      VARCHAR(50) not null,
     testScore     DOUBLE,
     studentTestId INT,
     PRIMARY KEY (testId),
