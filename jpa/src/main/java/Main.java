@@ -27,6 +27,7 @@ public class Main {
             }
         }
     }
+
     public static void mainMenu(){
         var mainMenu = new Menu("Main Menu!");
         mainMenu.addMenuItem("1 - Planet", Main::planetsMenu);
@@ -45,6 +46,7 @@ public class Main {
         planetMenu.addMenuItem("4 - Delete a planet", () -> System.out.println("delete"));
         planetMenu.displayMenu();
     }
+
     public static void moonMenu(){
         var moonMenu = new Menu("Moon Menu!");
         moonMenu.addMenuItem("1 - Show all moons", Read::showAllMoons);
@@ -53,6 +55,7 @@ public class Main {
         moonMenu.addMenuItem("4 - Delete a moon", () -> System.out.println("delete"));
         moonMenu.displayMenu();
     }
+
     public static void solarSystemMenu(){
         var solarSystemMenu = new Menu("Solar system Menu!");
         solarSystemMenu.addMenuItem("1 - Show all solar systems", Read::showAllSolarSystems);
@@ -61,6 +64,7 @@ public class Main {
         solarSystemMenu.addMenuItem("4 - Delete a solar system", () -> System.out.println("delete"));
         solarSystemMenu.displayMenu();
     }
+
     public static void studentMenu(){
         var studentMenu = new Menu("Student Menu!");
         studentMenu.addMenuItem("1 - Show all Students", Read::showAllStudents);
@@ -78,5 +82,4 @@ public class Main {
         testMenu.addMenuItem("4 - Delete a test", () -> System.out.println("delete"));
         testMenu.displayMenu();
     }
-
 }
