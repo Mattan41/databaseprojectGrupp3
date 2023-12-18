@@ -1,10 +1,19 @@
 CREATE TABLE planet
 (
-    planetId   INT AUTO_INCREMENT,
+    planetId   INT NOT NULL AUTO_INCREMENT,
     planetName VARCHAR(255),
     planetSize INT,
     planetType VARCHAR(255),
-    PRIMARY KEY (planetId)
+    SolarSystemId INT,
+    PRIMARY KEY (planetId),
+    FOREIGN KEY (SolarSystemId) REFERENCES SolarSystemId(SolarSystemId)
+);
+
+CREATE TABLE SolarSystemId
+(
+    SolarSystemId INT NOT NULL AUTO_INCREMENT,
+    SolarSystemName VARCHAR(255),
+    GalaxyName VARCHAR(255)
 );
 
 CREATE TABLE moon
