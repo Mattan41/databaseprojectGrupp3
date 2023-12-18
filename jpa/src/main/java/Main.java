@@ -1,4 +1,5 @@
 import com.example.entities.Student;
+import com.example.entities.util.Menu;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -8,6 +9,12 @@ import java.util.function.Consumer;
 public class Main {
 
     public static void main(String[] args) {
+        var mainMenu = new Menu("Main Menu!");
+        mainMenu.addMenuItem("First option", () -> System.out.println("You picked first option!"));
+        mainMenu.addMenuItem("Second option", () -> System.out.println("You picked second option!"));
+
+        mainMenu.displayMenu();
+
         EntityManager em = JPAUtil.getEntityManager();
 
         System.out.print("Enter search term: ");

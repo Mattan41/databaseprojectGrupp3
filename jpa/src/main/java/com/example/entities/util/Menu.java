@@ -9,7 +9,6 @@ public class Menu {
 
     public Menu(String name) {
         this.name = name;
-
     }
 
     public void addMenuItem(String description, Runnable action) {
