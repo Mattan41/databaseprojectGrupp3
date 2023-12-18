@@ -1,9 +1,9 @@
 CREATE TABLE planet
 (
-    planetId   INT NOT NULL AUTO_INCREMENT,
-    planetName VARCHAR(255),
-    planetSize INT,
-    planetType VARCHAR(255),
+    planetId      INT NOT NULL AUTO_INCREMENT,
+    planetName    VARCHAR(255) not null unique,
+    planetSize    INT,
+    planetType    VARCHAR(255),
     SolarSystemId INT,
     PRIMARY KEY (planetId),
     FOREIGN KEY (SolarSystemId) REFERENCES SolarSystemId (SolarSystemId)
