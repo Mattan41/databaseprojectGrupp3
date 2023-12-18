@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class Create {
     static EntityManager em = JPAUtil.getEntityManager();
 
-    public static Runnable createPlanet() {
+    public static void createPlanet() {
 
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter planet to add: ");
@@ -22,16 +22,16 @@ public class Create {
         // Validate user input
         if (planetName == null || planetName.isEmpty()) {
             System.out.println("Invalid input.");
-            return null;
+            return;
         }
 
         if (planetSize <= 0 ) {
             System.out.println("Invalid input.");
-            return null;
+            return;
         }
         if (planetType == null || planetType.isEmpty()) {
             System.out.println("Invalid input.");
-            return null;
+            return;
         }
 
 
@@ -46,6 +46,6 @@ public class Create {
         em.persist(planet);
         transaction.commit();
         em.close();
-        return null;
+        ;
     }
 }

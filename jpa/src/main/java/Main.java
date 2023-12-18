@@ -8,8 +8,6 @@ public class Main {
     public static void main(String[] args) {
         mainMenu();
 
-
-
     }
 
     static void inTransaction(Consumer<EntityManager> work) {
@@ -40,9 +38,9 @@ public class Main {
     public static void planetsMenu(){
         var planetMenu = new Menu("Planet Menu!");
         planetMenu.addMenuItem("1 - Show all planets", Read::showAllPlanets);
-        planetMenu.addMenuItem("2 - Insert a new planet", Create.createPlanet());
+        planetMenu.addMenuItem("2 - Insert a new planet", Create::createPlanet);
         planetMenu.addMenuItem("3 - Update a planet", () -> System.out.println("update!"));
-        planetMenu.addMenuItem("4 - Delete a planet", () -> System.out.println("delete"));
+        planetMenu.addMenuItem("4 - Delete a planet", () -> System.out.println("update!"));
         planetMenu.displayMenu();
     }
     public static void moonMenu(){
