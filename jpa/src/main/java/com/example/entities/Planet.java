@@ -51,4 +51,13 @@ public class Planet {
         this.planetType = planetType;
     }
 
+    @Override
+    public String toString() {
+        return "Planet{" +
+                "id=" + id +
+                ", planetName='" + planetName + '\'' +
+                ", planetSize=" + planetSize +
+                ", planetType='" + planetType + '\'' +
+                '}';
+    }
 }

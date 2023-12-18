@@ -9,12 +9,7 @@ import java.util.function.Consumer;
 public class Main {
 
     public static void main(String[] args) {
-        var mainMenu = new Menu("Main Menu!");
-        mainMenu.addMenuItem("First option", () -> System.out.println("You picked first option!"));
-        mainMenu.addMenuItem("Second option", () -> System.out.println("You picked second option!"));
-
-        mainMenu.displayMenu();
-
+        mainMenu();
         EntityManager em = JPAUtil.getEntityManager();
 
         System.out.print("Enter search term: ");
@@ -50,4 +45,56 @@ public class Main {
             }
         }
     }
+    public static void mainMenu(){
+        var mainMenu = new Menu("Main Menu!");
+        mainMenu.addMenuItem("1 - Planet", Main::planetsMenu);
+        mainMenu.addMenuItem("2 - Moon", Main::moonMenu);
+        mainMenu.addMenuItem("3 - Solar system", Main::solarSystemMenu);
+        mainMenu.addMenuItem("4 - Student", Main::studentMenu);
+        mainMenu.addMenuItem("5 - Test", Main::testMenu);
+        mainMenu.displayMenu();
+    }
+
+    public static void planetsMenu(){
+        var planetMenu = new Menu("Planet Menu!");
+        planetMenu.addMenuItem("1 - Show all planets", () -> System.out.println("show all!"));
+        planetMenu.addMenuItem("2 - Insert a new planet", () -> System.out.println("insert!"));
+        planetMenu.addMenuItem("3 - Update a planet", () -> System.out.println("update!"));
+        planetMenu.addMenuItem("4 - Delete a planet", () -> System.out.println("delete"));
+        planetMenu.displayMenu();
+    }
+    public static void moonMenu(){
+        var moonMenu = new Menu("Moon Menu!");
+        moonMenu.addMenuItem("1 - Show all moons", () -> System.out.println("show all!"));
+        moonMenu.addMenuItem("2 - Insert a new moon", () -> System.out.println("insert!"));
+        moonMenu.addMenuItem("3 - Update a moon", () -> System.out.println("update!"));
+        moonMenu.addMenuItem("4 - Delete a moon", () -> System.out.println("delete"));
+        moonMenu.displayMenu();
+    }
+    public static void solarSystemMenu(){
+        var solarSystemMenu = new Menu("Solar system Menu!");
+        solarSystemMenu.addMenuItem("1 - Show all solar systems", () -> System.out.println("show all!"));
+        solarSystemMenu.addMenuItem("2 - Insert a new solar system", () -> System.out.println("insert!"));
+        solarSystemMenu.addMenuItem("3 - Update a solar system", () -> System.out.println("update!"));
+        solarSystemMenu.addMenuItem("4 - Delete a solar system", () -> System.out.println("delete"));
+        solarSystemMenu.displayMenu();
+    }
+    public static void studentMenu(){
+        var studentMenu = new Menu("Student Menu!");
+        studentMenu.addMenuItem("1 - Show all Students", () -> System.out.println("show all!"));
+        studentMenu.addMenuItem("2 - Insert a new Student", () -> System.out.println("insert!"));
+        studentMenu.addMenuItem("3 - Update a Student", () -> System.out.println("update!"));
+        studentMenu.addMenuItem("4 - Delete a Student", () -> System.out.println("delete"));
+        studentMenu.displayMenu();
+    }
+
+    public static void testMenu(){
+        var testMenu = new Menu("test Menu!");
+        testMenu.addMenuItem("1 - Show all tests", () -> System.out.println("show all!"));
+        testMenu.addMenuItem("2 - Insert a new test", () -> System.out.println("insert!"));
+        testMenu.addMenuItem("3 - Update a test", () -> System.out.println("update!"));
+        testMenu.addMenuItem("4 - Delete a test", () -> System.out.println("delete"));
+        testMenu.displayMenu();
+    }
+
 }
