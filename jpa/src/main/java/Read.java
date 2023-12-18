@@ -7,6 +7,7 @@ import java.util.List;
 public class Read {
     static EntityManager em = JPAUtil.getEntityManager();
 
+    //Visa alla planeter
     public static void showAllPlanets() {
         TypedQuery<Planet> query = em.createQuery("SELECT p FROM Planet p", Planet.class);
         List<Planet> planets = query.getResultList();

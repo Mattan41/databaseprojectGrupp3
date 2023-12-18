@@ -89,7 +89,7 @@ public class Main {
     }
 
     public static void testMenu(){
-        var testMenu = new Menu("test Menu!");
+        var testMenu = new Menu("Test Menu!");
         testMenu.addMenuItem("1 - Show all tests", Read::showAllTests);
         testMenu.addMenuItem("2 - Insert a new test", () -> System.out.println("insert!"));
         testMenu.addMenuItem("3 - Update a test", () -> System.out.println("update!"));
