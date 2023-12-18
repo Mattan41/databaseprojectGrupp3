@@ -1,4 +1,4 @@
-package com.example.entities.util;
+package com.example.util;
 
 import java.util.Scanner;
 

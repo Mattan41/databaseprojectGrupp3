@@ -1,5 +1,5 @@
 import com.example.entities.Student;
-import com.example.entities.util.Menu;
+import com.example.util.Menu;
 import jakarta.persistence.*;
 
 import java.util.List;
