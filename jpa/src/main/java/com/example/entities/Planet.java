@@ -53,11 +53,6 @@ public class Planet {
 
     @Override
     public String toString() {
-        return "Planet{" +
-                "id=" + id +
-                ", planetName='" + planetName + '\'' +
-                ", planetSize=" + planetSize +
-                ", planetType='" + planetType + '\'' +
-                '}';
+        return planetName;
     }
 }

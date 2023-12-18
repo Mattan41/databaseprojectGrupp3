@@ -54,11 +54,6 @@ public class Test {
 
     @Override
     public String toString() {
-        return "Test{" +
-                "id=" + id +
-                ", testName='" + testName + '\'' +
-                ", testScore=" + testScore +
-                ", studentTest=" + studentTest +
-                '}';
+        return testName;
     }
 }

@@ -57,7 +57,7 @@ public class Main {
 
     public static void planetsMenu(){
         var planetMenu = new Menu("Planet Menu!");
-        planetMenu.addMenuItem("1 - Show all planets", () -> System.out.println("show all!"));
+        planetMenu.addMenuItem("1 - Show all planets", Read::showAllPlanets);
         planetMenu.addMenuItem("2 - Insert a new planet", () -> System.out.println("insert!"));
         planetMenu.addMenuItem("3 - Update a planet", () -> System.out.println("update!"));
         planetMenu.addMenuItem("4 - Delete a planet", () -> System.out.println("delete"));
@@ -81,7 +81,7 @@ public class Main {
     }
     public static void studentMenu(){
         var studentMenu = new Menu("Student Menu!");
-        studentMenu.addMenuItem("1 - Show all Students", () -> System.out.println("show all!"));
+        studentMenu.addMenuItem("1 - Show all Students", Read::showAllStudents);
         studentMenu.addMenuItem("2 - Insert a new Student", () -> System.out.println("insert!"));
         studentMenu.addMenuItem("3 - Update a Student", () -> System.out.println("update!"));
         studentMenu.addMenuItem("4 - Delete a Student", () -> System.out.println("delete"));
@@ -90,7 +90,7 @@ public class Main {
 
     public static void testMenu(){
         var testMenu = new Menu("test Menu!");
-        testMenu.addMenuItem("1 - Show all tests", () -> System.out.println("show all!"));
+        testMenu.addMenuItem("1 - Show all tests", Read::showAllTests);
         testMenu.addMenuItem("2 - Insert a new test", () -> System.out.println("insert!"));
         testMenu.addMenuItem("3 - Update a test", () -> System.out.println("update!"));
         testMenu.addMenuItem("4 - Delete a test", () -> System.out.println("delete"));
