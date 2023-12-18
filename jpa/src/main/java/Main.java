@@ -1,10 +1,11 @@
 import com.example.util.Menu;
 import jakarta.persistence.*;
 
+import java.util.Scanner;
 import java.util.function.Consumer;
 
 public class Main {
-
+    private static Scanner scanner = new Scanner(System.in);
     public static void main(String[] args) {
         mainMenu();
 
@@ -82,4 +83,19 @@ public class Main {
         testMenu.addMenuItem("4 - Delete a test", () -> System.out.println("delete"));
         testMenu.displayMenu();
     }
+
+    public static void updatePlanet() {
+        System.out.println("Enter the name of the planet you want to delete:");
+        String currentName = scanner.nextLine();
+        System.out.println("Enter the new name:");
+        String newName = scanner.nextLine();
+        System.out.println("Enter the new size:");
+        int newSize = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter the new type");
+        String newType = scanner.nextLine();
+        Update planet = new Update();
+        planet.updatePlanetName(currentName,newName,newSize,newType);
+    }
+
+
 }
