@@ -19,6 +19,13 @@ public class Planet {
     @Column(name = "planetType")
     private String planetType;
 
+    @Column(name = "solarSystemId")
+    private Integer solarSystemId;
+
+    public void setSolarSystemId(Integer solarSystemId) {
+        this.solarSystemId = solarSystemId;
+    }
+
     public Integer getId() {
         return id;
     }
