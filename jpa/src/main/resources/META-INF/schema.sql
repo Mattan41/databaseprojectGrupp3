@@ -6,46 +6,43 @@ CREATE TABLE planet
     planetType VARCHAR(255),
     SolarSystemId INT,
     PRIMARY KEY (planetId),
-    FOREIGN KEY (SolarSystemId) REFERENCES SolarSystemId(SolarSystemId)
+    FOREIGN KEY (SolarSystemId) REFERENCES SolarSystemId (SolarSystemId)
 );
 
 CREATE TABLE SolarSystemId
 (
-    SolarSystemId INT NOT NULL AUTO_INCREMENT,
-    SolarSystemName VARCHAR(255),
-    GalaxyName VARCHAR(255)
+    SolarSystemId   INT NOT NULL AUTO_INCREMENT,
+    SolarSystemName VARCHAR(255) not null unique,
+    GalaxyName      VARCHAR(255)
 );
 
 CREATE TABLE moon
 (
-    moonId   INT          NOT NULL AUTO_INCREMENT,
-    name     varchar(100) not null,
-    size DOUBLE,
-    planetId int          not null,
+    moonId   INT NOT NULL AUTO_INCREMENT,
+    name     varchar(100) not null unique,
+    size     DOUBLE,
+    planetId INT unique not null,
     PRIMARY KEY (moonId),
-    foreign key (planetId) references planet(planetId)
-);
-CREATE TABLE student(
-                        studentId INT NOT NULL AUTO_INCREMENT,
-                        studentSocialSecNum INT,
-                        studentName VARCHAR(50),
-                        studentAge INT,
-                        totResult DOUBLE,
-                        CHECK (studentAge > 0),
-                        PRIMARY KEY (studentId)
+    foreign key (planetId) references planet (planetId)
 );
 
-CREATE UNIQUE INDEX index_SocSecNum ON student(studentSocialSecNum);
-
-CREATE TABLE test(
-                     testId INT NOT NULL AUTO_INCREMENT,
-                     testName VARCHAR(50),
-                     testScore DOUBLE,
-                     studentTestId INT,
-                     PRIMARY KEY (testId),
-                     FOREIGN KEY (studentTestId) REFERENCES student(studentId)
+CREATE TABLE student
+(
+    studentId           INT NOT NULL AUTO_INCREMENT,
+    studentSocialSecNum INT NOT NULL UNIQUE,
+    studentName         VARCHAR(50),
+    studentAge          INT,
+    totResult           DOUBLE,
+    CHECK (studentAge > 0),
+    PRIMARY KEY (studentId)
 );
 
-
-
-INSERT INTO student (studentSocialSecNum, studentName, studentAge, totResult) VALUES (1234567890, 'Kalle Anka', 13, 0.0);
+CREATE TABLE test
+(
+    testId        INT NOT NULL UNIQUE AUTO_INCREMENT,
+    testName      VARCHAR(50) not null ,
+    testScore     DOUBLE,
+    studentTestId INT,
+    PRIMARY KEY (testId),
+    FOREIGN KEY (studentTestId) REFERENCES student (studentId)
+);
