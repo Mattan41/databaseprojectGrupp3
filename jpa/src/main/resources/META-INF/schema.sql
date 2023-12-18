@@ -28,7 +28,7 @@ CREATE TABLE moon
     moonId   INT NOT NULL AUTO_INCREMENT,
     name     varchar(100) not null unique,
     size     DOUBLE,
-    planetId INT unique not null,
+    planetId INT not null,
     PRIMARY KEY (moonId),
     foreign key (planetId) references planet (planetId)
 );

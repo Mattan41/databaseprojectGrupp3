@@ -1,3 +1,5 @@
+-- add solarSystem
+INSERT INTO SolarSystem (SolarSystemName, GalaxyName) VALUES ('Solar System', 'Milky Way');
 -- add planets
 INSERT INTO planet (planetName, planetSize, planetType, SolarSystemId) VALUES ('Mercury', 4879, 'Terrestrial', 1);
 INSERT INTO planet (planetName, planetSize, planetType, SolarSystemId) VALUES ('Venus', 12104, 'Terrestrial', 1);
@@ -8,8 +10,7 @@ INSERT INTO planet (planetName, planetSize, planetType, SolarSystemId) VALUES ('
 INSERT INTO planet (planetName, planetSize, planetType, SolarSystemId) VALUES ('Uranus', 50724, 'Ice Giant', 1);
 INSERT INTO planet (planetName, planetSize, planetType, SolarSystemId) VALUES ('Neptune', 49244, 'Ice Giant', 1);
 
--- add solarSystem
-INSERT INTO SolarSystemId (SolarSystemName, GalaxyName) VALUES ('Solar System', 'Milky Way');
+
 
 -- add moon
 -- Moons of Earth
@@ -39,4 +40,4 @@ INSERT INTO student (studentSocialSecNum, studentName, studentAge, totResult) VA
 INSERT INTO test (testName, testScore, studentTestId) VALUES ('Physics', 89.5, 2);
 INSERT INTO test (testName, testScore, studentTestId) VALUES ('Chemistry', 91.2, 3);
 INSERT INTO test (testName, testScore, studentTestId) VALUES ('Mathematics', 95.0, 1);
-INSERT INTO test (testName, testScore, studentTestId) VALUES ('planet size' 100.0, 4)
+INSERT INTO test (testName, testScore, studentTestId) VALUES ('planet size', 100.0, 4)
