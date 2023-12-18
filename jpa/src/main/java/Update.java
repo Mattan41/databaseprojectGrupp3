@@ -1,5 +1,6 @@
 import com.example.entities.Planet;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 
@@ -29,21 +30,19 @@ public class Update {
         em.getTransaction().begin();
         TypedQuery<Planet> query = em.createQuery("SELECT p FROM Planet p WHERE p.planetName = :planetName", Planet.class);
         query.setParameter("planetName", currentName);
-
         try {
             Planet planet = query.getSingleResult();
             planet.setPlanetName(newName);
             planet.setPlanetSize(newSize);
             planet.setPlanetType(newType);
             em.merge(planet);
+            em.getTransaction().commit();
             System.out.println("Planet " + currentName + " updated to [name:" + newName + " size:" + newSize + " type:" + newType + "]");
         } catch (NoResultException e) {
             System.out.println("Planet " + currentName + " not found");
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw e;
         }
-
-        em.getTransaction().commit();
         em.close();
     }
-
-
 }
