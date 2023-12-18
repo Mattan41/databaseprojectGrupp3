@@ -1,9 +1,6 @@
-import com.example.entities.Student;
 import com.example.util.Menu;
 import jakarta.persistence.*;
 
-import java.util.List;
-import java.util.Scanner;
 import java.util.function.Consumer;
 
 public class Main {
@@ -12,22 +9,7 @@ public class Main {
         mainMenu();
         EntityManager em = JPAUtil.getEntityManager();
 
-        System.out.print("Enter search term: ");
-        Scanner scanner = new Scanner(System.in);
-        String name = scanner.nextLine();
-
-        // Validate user input
-        if (name == null || name.isEmpty()) {
-            System.out.println("Invalid input.");
-            return;
-        }
-
-        TypedQuery<Student> query = em.createQuery("SELECT c FROM Student c WHERE c.studentName = :name", Student.class);
-        query.setParameter("name", name);
-        List<Student> students = query.getResultList();
-        students.forEach(System.out::println);
-
-        em.close();
+        Create.createPlanet(em);
     }
 
     static void inTransaction(Consumer<EntityManager> work) {
