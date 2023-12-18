@@ -13,7 +13,7 @@ CREATE TABLE planet
     planetType    VARCHAR(255),
     SolarSystemId INT,
     PRIMARY KEY (planetId),
-    FOREIGN KEY (SolarSystemId) REFERENCES SolarSystemId (SolarSystemId)
+    FOREIGN KEY (SolarSystemId) REFERENCES SolarSystem (SolarSystemId)
 );
 
 
