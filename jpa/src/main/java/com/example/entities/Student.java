@@ -76,4 +76,13 @@ public class Student {
         this.tests = tests;
     }
 
+    @Override
+    public String toString() {
+        return "Student{" +
+                "studentSocialSecNum=" + studentSocialSecNum +
+                ", studentName='" + studentName + '\'' +
+                ", studentAge=" + studentAge +
+                ", totResult=" + totResult +
+                '}';
+    }
 }
