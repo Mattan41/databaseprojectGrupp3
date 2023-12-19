@@ -8,7 +8,7 @@ CREATE TABLE SolarSystem
 CREATE TABLE planet
 (
     planetId      INT NOT NULL AUTO_INCREMENT,
-    planetName    VARCHAR(255),
+    planetName    VARCHAR(255) NOT NULL UNIQUE,
     planetSize    INT,
     planetType    VARCHAR(255),
     SolarSystemId INT,
@@ -40,7 +40,7 @@ CREATE TABLE student
 CREATE TABLE test
 (
     testId        INT NOT NULL UNIQUE AUTO_INCREMENT,
-    testName      VARCHAR(50) not null ,
+    testName      VARCHAR(50) NOT NULL UNIQUE ,
     testScore     DOUBLE,
     studentTestId INT,
     PRIMARY KEY (testId),
