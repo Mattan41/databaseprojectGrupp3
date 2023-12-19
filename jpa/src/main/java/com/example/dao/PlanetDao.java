@@ -4,6 +4,7 @@ import com.example.JPAUtil;
 import com.example.entities.Planet;
 import com.example.util.InputReader;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 
@@ -92,4 +93,34 @@ public class PlanetDao {
         }
         em.close();
     }
+
+    public void deletePlanet(String planetName) {
+
+        EntityTransaction transaction = null;
+        try (EntityManager entityManager = JPAUtil.getEntityManager()) {
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            TypedQuery<Planet> query = entityManager.createNamedQuery("Planet.findByName", Planet.class);
+            query.setParameter("planetName", planetName);
+
+            Planet planet = query.getSingleResult();
+            entityManager.remove(planet);
+            transaction.commit();
+
+            System.out.println("The planet " + planetName + " is deleted!");
+        } catch (NoResultException e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            System.out.println("Planet not found with name: " + planetName);
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            System.err.println("Error occurred: " + e.getMessage());
+        }
+    }
 }
+
+

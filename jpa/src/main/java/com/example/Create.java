@@ -1,4 +1,7 @@
+package com.example;
 import com.example.entities.Moon;
+
+import com.example.JPAUtil;
 import com.example.entities.Planet;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;

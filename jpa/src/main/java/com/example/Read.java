@@ -1,3 +1,6 @@
+package com.example;
+
+import com.example.JPAUtil;
 import com.example.entities.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
