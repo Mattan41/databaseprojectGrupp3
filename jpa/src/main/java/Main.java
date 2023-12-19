@@ -52,7 +52,7 @@ public class Main {
         moonMenu.addMenuItem("1 - Show all moons", Read::showAllMoons);
         moonMenu.addMenuItem("2 - Insert a new moon", () -> System.out.println("insert!"));
         moonMenu.addMenuItem("3 - Update a moon", () -> System.out.println("update!"));
-        moonMenu.addMenuItem("4 - Delete a moon", () -> System.out.println("delete"));
+        moonMenu.addMenuItem("4 - Delete a moon", Delete::deleteMoon);
         moonMenu.displayMenu();
     }
 

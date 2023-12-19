@@ -1,4 +1,6 @@
+import com.example.entities.Moon;
 import com.example.entities.Planet;
+import com.example.entities.Student;
 import jakarta.persistence.TypedQuery;
 
 import java.util.Scanner;
@@ -19,6 +21,25 @@ import java.util.Scanner;
                     System.out.println("The planet is deleted!");
                 } else {
                     System.out.println("Planet not found with name: " + planetName);
+                }
+            });
+        }
+
+        public static void deleteMoon() {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Enter the name of the moon you want to delete: ");
+            String moonName = scanner.nextLine();
+
+            Main.inTransaction(entityManager -> {
+                TypedQuery<Moon> query = entityManager.createNamedQuery("Moon.findByName", Moon.class);
+                query.setParameter("moonName", moonName);
+
+                Moon moon = query.getSingleResult();
+                if (moon != null) {
+                    entityManager.remove(moon);
+                    System.out.println("The moon is deleted!");
+                } else {
+                    System.out.println("Moon not found with name: " + moonName);
                 }
             });
         }
