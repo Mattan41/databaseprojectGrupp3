@@ -7,26 +7,22 @@ import jakarta.persistence.TypedQuery;
 import java.util.Scanner;
 
 public class Update {
-    static EntityManager em = JPAUtil.getEntityManager();
 
     private static Scanner scanner = new Scanner(System.in);
 
-    public static void updatePlanet() {
-        Scanner scanner = new Scanner(System.in);
+    public static void updatePlanetInput() {
         System.out.println("Enter the name of the planet you want to update:");
         String currentName = scanner.nextLine();
-        System.out.println("Enter the new name:");
-        String newName = scanner.nextLine();
-        System.out.println("Enter the new size:");
-        int newSize = Integer.parseInt(scanner.nextLine());
-        System.out.println("Enter the new type:");
-        String newType = scanner.nextLine();
 
-        updatePlanetName(currentName, newName, newSize, newType);
+        String[] properties = {"new name", "new size", "new type"};
+        String[] inputs = getUserInputs(scanner, properties);
 
+        if (planetExist(currentName)) updatePlanet(currentName, inputs[0], Integer.parseInt(inputs[1]), inputs[2]);
+        else System.out.println("Planet " + currentName + " does not exist.");
     }
 
-    public static void updatePlanetName(String currentName, String newName, int newSize, String newType) {
+    public static void updatePlanet(String currentName, String newName, int newSize, String newType) {
+        EntityManager em = JPAUtil.getEntityManager();
         em.getTransaction().begin();
         TypedQuery<Planet> query = em.createQuery("SELECT p FROM Planet p WHERE p.planetName = :planetName", Planet.class);
         query.setParameter("planetName", currentName);
@@ -39,10 +35,27 @@ public class Update {
             em.getTransaction().commit();
             System.out.println("Planet " + currentName + " updated to [name:" + newName + " size:" + newSize + " type:" + newType + "]");
         } catch (NoResultException e) {
-            System.out.println("Planet " + currentName + " not found");
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
             throw e;
         }
         em.close();
+    }
+
+    public static String[] getUserInputs(Scanner scanner, String[] properties) {
+        String[] inputs = new String[properties.length];
+        for (int i = 0; i < properties.length; i++) {
+            System.out.println("Enter the " + properties[i] + ":");
+            inputs[i] = scanner.nextLine();
+        }
+        return inputs;
+    }
+
+    public static boolean planetExist(String currentName) {
+        EntityManager em = JPAUtil.getEntityManager();
+        TypedQuery<Long> countQuery = em.createQuery("SELECT COUNT(p) FROM Planet p WHERE p.planetName = :planetName", Long.class);
+        countQuery.setParameter("planetName", currentName);
+        long count = countQuery.getSingleResult();
+        em.close();
+        return count > 0;
     }
 }
