@@ -64,14 +64,10 @@ public class Create {
             return;
         }
 
-        Main.inTransaction(entityManager -> {
-            TypedQuery<Moon> query = entityManager.createNamedQuery("Moon.findByName", Moon.class);
-            query.setParameter("moonName", moonName);
-            List<Moon> moons = query.getResultList();
-            if (!moons.isEmpty()) {
-                System.out.println( moonName + " already in database");
-            }
-        });
+        if (moonExist(moonName)){
+            System.out.println( moonName + " already in database");
+            return;
+        }
 
 
         System.out.print("Enter moonSize: ");
@@ -103,7 +99,14 @@ public class Create {
 
     public static void insertStudent() {
     }
+    public static boolean moonExist(String moonName) {
 
+        TypedQuery<Long> countQuery = em.createQuery("SELECT COUNT(m) FROM Moon m WHERE m.name = :moonName", Long.class);
+        countQuery.setParameter("moonName", moonName);
+        long count = countQuery.getSingleResult();
+        em.close();
+        return count > 0;
+    }
 
 
 }
