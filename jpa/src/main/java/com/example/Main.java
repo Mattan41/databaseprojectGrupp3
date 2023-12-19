@@ -21,6 +21,9 @@ public class Main {
         var mainMenu = new Menu("Main Menu!");
         var moonMenu = new Menu("Moon");
         var planetsMenu = new Menu("Planets");
+        var solarSystemMenu = new Menu("Solar Systems");
+        var studentMenu = new Menu("Students");
+        var testsMenu = new Menu ("Tests");
 
         planetsMenu.addMenuItem("Show Planets", planetDao::showAllPlanets);
         planetsMenu.addMenuItem("Create planet", planetDao::createPlanet);
