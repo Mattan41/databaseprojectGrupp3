@@ -17,6 +17,17 @@ public class Moon {
     @Column(name = "size")
     private Double size;
 
+    @Column(name = "planetId")
+    private Integer planetId;
+
+    public Integer getPlanetId() {
+        return planetId;
+    }
+
+    public void setPlanetId(Integer planetId) {
+        this.planetId = planetId;
+    }
+
     public Integer getId() {
         return id;
     }
