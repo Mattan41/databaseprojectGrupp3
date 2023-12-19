@@ -10,7 +10,12 @@ public class InputReader {
         while (true) {
             System.out.print(prompt);
             try {
-                return Integer.parseInt(scanner.nextLine());
+                int value = Integer.parseInt(scanner.nextLine());
+                if (value < 0) {
+                    System.out.println("Input cannot be below 0. Please try again.");
+                    continue;
+                }
+                return value;
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter a valid integer.");
             }
@@ -21,15 +26,28 @@ public class InputReader {
         while (true) {
             System.out.print(prompt);
             try {
-                return Double.parseDouble(scanner.nextLine());
+                double value = Double.parseDouble(scanner.nextLine());
+                if (value < 0) {
+                    System.out.println("Input cannot be below 0. Please try again.");
+                    continue;
+                }
+                return value;
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a valid integer.");
+                System.out.println("Invalid input. Please enter a valid number.");
             }
         }
     }
 
     public static String inputString(String prompt) {
-        System.out.print(prompt);
-        return scanner.nextLine();
+        String input;
+        do {
+            System.out.print(prompt);
+            input = scanner.nextLine();
+            if (input.isEmpty()) {
+                System.out.println("Input cannot be empty. Please try again.");
+            }
+        } while (input.isEmpty());
+
+        return input;
     }
 }

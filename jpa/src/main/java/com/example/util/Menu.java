@@ -20,7 +20,7 @@ public class Menu {
             System.out.println("\n" + name.toUpperCase());
             System.out.println("Options:");
             for (int i = 0; i < menuItems.size(); i++) {
-                System.out.println((i + 1) + ". " + menuItems.get(i).description());
+                System.out.println((i + 1) + " - " + menuItems.get(i).description());
             }
             System.out.println("0. Exit");
 

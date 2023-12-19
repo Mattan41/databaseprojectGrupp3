@@ -1,7 +1,6 @@
 package com.example;
 
-import com.example.JPAUtil;
-import com.example.dao.PlanetDao;
+import com.example.dao.*;
 import com.example.util.InputReader;
 import com.example.util.Menu;
 import jakarta.persistence.*;
@@ -11,8 +10,13 @@ import java.util.function.Consumer;
 
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
         var planetDao = new PlanetDao();
+        var moonDao = new MoonDao();
+        var solarSystemDao = new SolarSystemDao();
+        var studentDao = new StudentDao();
+        var testsDao = new TestDao();
 
         var mainMenu = new Menu("Main Menu!");
         var moonMenu = new Menu("Moon");
@@ -24,8 +28,11 @@ public class Main {
         planetsMenu.addMenuItem("Delete planet", () -> planetDao.deletePlanet(InputReader.inputString("Enter the name of planet to delete: ")));
         planetsMenu.addMenuItem("Update planet", planetDao::updatePlanet);
 
-        mainMenu.addMenuItem("1 - Planet", planetsMenu::displayMenu);
-        mainMenu.addMenuItem("2 - Moon", moonMenu::displayMenu);
+        mainMenu.addMenuItem("Planet", planetsMenu::displayMenu);
+        mainMenu.addMenuItem("Moon", moonMenu::displayMenu);
+        mainMenu.addMenuItem("Solar System", solarSystemMenu::displayMenu);
+        mainMenu.addMenuItem("Students", studentMenu::displayMenu);
+        mainMenu.addMenuItem("Tests", testsMenu::displayMenu);
 
         mainMenu.displayMenu();
     }
@@ -96,8 +103,6 @@ public class Main {
 //        testMenu.addMenuItem("4 - Delete a test", () -> System.out.println("delete"));
 //        testMenu.displayMenu();
 //    }
-
-
 
 
 }
