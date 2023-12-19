@@ -26,10 +26,21 @@ public class Main {
         var testsMenu = new Menu ("Tests");
 
         planetsMenu.addMenuItem("Show Planets", planetDao::showAllPlanets);
-        planetsMenu.addMenuItem("Create planet", planetDao::createPlanet);
+        planetsMenu.addMenuItem("Insert planet", planetDao::insertPlanet);
         planetsMenu.addMenuItem("Show Planets", planetDao::showPlanetsMoons);
         planetsMenu.addMenuItem("Delete planet", () -> planetDao.deletePlanet(InputReader.inputString("Enter the name of planet to delete: ")));
-        planetsMenu.addMenuItem("Update planet", planetDao::updatePlanet);
+        planetsMenu.addMenuItem("Update planet", planetDao::updatePlanetInput);
+
+        moonMenu.addMenuItem("Show moons", moonDao::showAllMoons);
+        moonMenu.addMenuItem("Insert moon", moonDao::insertMoon);
+        moonMenu.addMenuItem("Update moon", moonDao::updateMoonInput);
+        moonMenu.addMenuItem("Delete moon", () -> moonDao.deleteMoon(InputReader.inputString("Enter the name of the moon to delete:")));
+
+        solarSystemMenu.addMenuItem("Show solar systems", solarSystemDao::showAllSolarSystems);
+
+        studentMenu.addMenuItem("Show students", studentDao::showAllStudents);
+
+        testsMenu.addMenuItem("Show tests", testsDao::showAllTests);
 
         mainMenu.addMenuItem("Planet", planetsMenu::displayMenu);
         mainMenu.addMenuItem("Moon", moonMenu::displayMenu);

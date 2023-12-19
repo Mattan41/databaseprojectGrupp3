@@ -22,7 +22,7 @@ public class PlanetDao {
         em.close();
     }
 
-    public void createPlanet() {
+    public void insertPlanet() {
         EntityManager em = JPAUtil.getEntityManager();
 
         var planetName = InputReader.inputString("Enter planet name: ");
@@ -57,23 +57,16 @@ public class PlanetDao {
         }
     }
 
-    public void updatePlanet() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter the name of the planet you want to update:");
-        String currentName = scanner.nextLine();
-        System.out.println("Enter the new name:");
-        String newName = scanner.nextLine();
-        System.out.println("Enter the new size:");
-        int newSize = Integer.parseInt(scanner.nextLine());
-        System.out.println("Enter the new type:");
-        String newType = scanner.nextLine();
-
-        updatePlanetName(currentName, newName, newSize, newType);
-
+    public void updatePlanetInput() {
+        var currentName = InputReader.inputString("Enter the name of the planet you want to update:");
+        var newName = InputReader.inputString("Enter the new name:");
+        var newSize = InputReader.inputInt("Enter the new size:");
+        var newType = InputReader.inputString("Enter the new type:");
+        if (planetExist(currentName)) updatePlanet(currentName, newName, newSize, newType);
+        else System.out.println("Planet " + currentName + " does not exist.");
     }
 
-    public void updatePlanetName(String currentName, String newName, int newSize, String newType) {
-
+    public void updatePlanet(String currentName, String newName, int newSize, String newType) {
         EntityManager em = JPAUtil.getEntityManager();
         em.getTransaction().begin();
         TypedQuery<Planet> query = em.createQuery("SELECT p FROM Planet p WHERE p.planetName = :planetName", Planet.class);
@@ -86,8 +79,7 @@ public class PlanetDao {
             em.merge(planet);
             em.getTransaction().commit();
             System.out.println("Planet " + currentName + " updated to [name:" + newName + " size:" + newSize + " type:" + newType + "]");
-        } catch (NoResultException e) {
-            System.out.println("Planet " + currentName + " not found");
+        } catch (Exception e) {
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
             throw e;
         }
@@ -120,6 +112,15 @@ public class PlanetDao {
             }
             System.err.println("Error occurred: " + e.getMessage());
         }
+    }
+
+    public static boolean planetExist(String currentName) {
+        EntityManager em = JPAUtil.getEntityManager();
+        TypedQuery<Long> countQuery = em.createQuery("SELECT COUNT(p) FROM Planet p WHERE p.planetName = :planetName", Long.class);
+        countQuery.setParameter("planetName", currentName);
+        long count = countQuery.getSingleResult();
+        em.close();
+        return count > 0;
     }
 
     public void showPlanetsMoons() {
