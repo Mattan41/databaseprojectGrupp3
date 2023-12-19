@@ -68,7 +68,7 @@ public class Main {
     public static void studentMenu(){
         var studentMenu = new Menu("Student Menu!");
         studentMenu.addMenuItem("1 - Show all Students", Read::showAllStudents);
-        studentMenu.addMenuItem("2 - Insert a new Student", () -> System.out.println("insert!"));
+        studentMenu.addMenuItem("2 - Insert a new Student", Create::insertStudent);
         studentMenu.addMenuItem("3 - Update a Student", () -> System.out.println("update!"));
         studentMenu.addMenuItem("4 - Delete a Student", () -> System.out.println("delete"));
         studentMenu.displayMenu();
