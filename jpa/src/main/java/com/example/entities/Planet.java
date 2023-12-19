@@ -3,6 +3,7 @@ package com.example.entities;
 import jakarta.persistence.*;
 
 @Entity
+@NamedQuery(name = "Planet.findByName", query = "SELECT p FROM Planet p WHERE p.planetName = :planetName")
 @Table(name = "planet", schema = "planets")
 public class Planet {
     @Id

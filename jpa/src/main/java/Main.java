@@ -43,7 +43,7 @@ public class Main {
         planetMenu.addMenuItem("1 - Show all planets", Read::showAllPlanets);
         planetMenu.addMenuItem("2 - Insert a new planet", Create::createPlanet);
         planetMenu.addMenuItem("3 - Update a planet", Update::updatePlanet);
-        planetMenu.addMenuItem("4 - Delete a planet", () -> System.out.println("delete"));
+        planetMenu.addMenuItem("4 - Delete a planet", Delete::deletePlanet);
         planetMenu.displayMenu();
     }
 
