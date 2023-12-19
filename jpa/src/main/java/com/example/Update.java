@@ -1,6 +1,8 @@
+package com.example;
+
+import com.example.JPAUtil;
 import com.example.entities.Planet;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 

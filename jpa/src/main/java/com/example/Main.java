@@ -7,27 +7,27 @@ import java.util.function.Consumer;
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
     public static void main(String[] args) {
-        mainMenu();
+
 
 
 
     }
 
-    static void inTransaction(Consumer<EntityManager> work) {
-        try (EntityManager entityManager = JPAUtil.getEntityManager()) {
-            EntityTransaction transaction = entityManager.getTransaction();
-            try {
-                transaction.begin();
-                work.accept(entityManager);
-                transaction.commit();
-            } catch (Exception e) {
-                if (transaction.isActive()) {
-                    transaction.rollback();
-                }
-                throw e;
-            }
-        }
-    }
+//    static void inTransaction(Consumer<EntityManager> work) {
+//        try (EntityManager entityManager = JPAUtil.getEntityManager()) {
+//            EntityTransaction transaction = entityManager.getTransaction();
+//            try {
+//                transaction.begin();
+//                work.accept(entityManager);
+//                transaction.commit();
+//            } catch (Exception e) {
+//                if (transaction.isActive()) {
+//                    transaction.rollback();
+//                }
+//                throw e;
+//            }
+//        }
+//    }
     public static void mainMenu(){
         var mainMenu = new Menu("Main Menu!");
         mainMenu.addMenuItem("1 - Planet", Main::planetsMenu);
