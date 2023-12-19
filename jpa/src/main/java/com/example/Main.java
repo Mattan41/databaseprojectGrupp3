@@ -43,17 +43,19 @@ public class Main {
         planetMenu.addMenuItem("1 - Show all planets", Read::showAllPlanets);
         planetMenu.addMenuItem("2 - Insert a new planet", Create::createPlanet);
         planetMenu.addMenuItem("3 - Update a planet", Update::updatePlanet);
-        planetMenu.addMenuItem("4 - Delete a planet", () -> System.out.println("delete"));
+        planetMenu.addMenuItem("4 - Delete a planet", Delete::deletePlanet);
         planetMenu.displayMenu();
     }
+
     public static void moonMenu(){
         var moonMenu = new Menu("Moon Menu!");
         moonMenu.addMenuItem("1 - Show all moons", Read::showAllMoons);
-        moonMenu.addMenuItem("2 - Insert a new moon", () -> System.out.println("insert!"));
+        moonMenu.addMenuItem("2 - Insert a new moon", Create::insertMoon);
         moonMenu.addMenuItem("3 - Update a moon", () -> System.out.println("update!"));
-        moonMenu.addMenuItem("4 - Delete a moon", () -> System.out.println("delete"));
+        moonMenu.addMenuItem("4 - Delete a moon", Delete::deleteMoon);
         moonMenu.displayMenu();
     }
+
     public static void solarSystemMenu(){
         var solarSystemMenu = new Menu("Solar system Menu!");
         solarSystemMenu.addMenuItem("1 - Show all solar systems", Read::showAllSolarSystems);
@@ -62,6 +64,7 @@ public class Main {
         solarSystemMenu.addMenuItem("4 - Delete a solar system", () -> System.out.println("delete"));
         solarSystemMenu.displayMenu();
     }
+
     public static void studentMenu(){
         var studentMenu = new Menu("Student Menu!");
         studentMenu.addMenuItem("1 - Show all Students", Read::showAllStudents);
@@ -80,7 +83,18 @@ public class Main {
         testMenu.displayMenu();
     }
 
-
+    public static void updatePlanet() {
+        System.out.println("Enter the name of the planet you want to delete:");
+        String currentName = scanner.nextLine();
+        System.out.println("Enter the new name:");
+        String newName = scanner.nextLine();
+        System.out.println("Enter the new size:");
+        int newSize = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter the new type");
+        String newType = scanner.nextLine();
+        Update planet = new Update();
+        planet.updatePlanetName(currentName,newName,newSize,newType);
+    }
 
 
 }

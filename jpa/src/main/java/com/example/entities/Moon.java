@@ -3,6 +3,7 @@ package com.example.entities;
 import jakarta.persistence.*;
 
 @Entity
+@NamedQuery(name = "Moon.findByName", query = "SELECT m FROM Moon m WHERE m.name = :moonName")
 @Table(name = "moon", schema = "planets")
 public class Moon {
     @Id
@@ -15,6 +16,17 @@ public class Moon {
 
     @Column(name = "size")
     private Double size;
+
+    @Column(name = "planetId")
+    private Integer planetId;
+
+    public Integer getPlanetId() {
+        return planetId;
+    }
+
+    public void setPlanetId(Integer planetId) {
+        this.planetId = planetId;
+    }
 
     public Integer getId() {
         return id;
