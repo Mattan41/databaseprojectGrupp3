@@ -2,6 +2,7 @@ package com.example;
 
 import com.example.JPAUtil;
 import com.example.dao.PlanetDao;
+import com.example.util.InputReader;
 import com.example.util.Menu;
 import jakarta.persistence.*;
 
@@ -16,8 +17,12 @@ public class Main {
         var mainMenu = new Menu("Main Menu!");
         var moonMenu = new Menu("Moon");
         var planetsMenu = new Menu("Planets");
+
         planetsMenu.addMenuItem("Show Planets", planetDao::showAllPlanets);
-        planetsMenu.addMenuItem("Delete planet", () -> planetDao.deletePlanet("Earth2"));
+        planetsMenu.addMenuItem("Create planet", planetDao::createPlanet);
+        planetsMenu.addMenuItem("Show Planets", planetDao::showPlanetsMoons);
+        planetsMenu.addMenuItem("Delete planet", () -> planetDao.deletePlanet(InputReader.inputString("Enter the name of planet to delete: ")));
+        planetsMenu.addMenuItem("Update planet", planetDao::updatePlanet);
 
         mainMenu.addMenuItem("1 - Planet", planetsMenu::displayMenu);
         mainMenu.addMenuItem("2 - Moon", moonMenu::displayMenu);
