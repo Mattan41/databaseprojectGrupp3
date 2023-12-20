@@ -23,9 +23,10 @@ public class Main {
         var planetsMenu = new Menu("Planets");
         var solarSystemMenu = new Menu("Solar Systems");
         var studentMenu = new Menu("Students");
-        var testsMenu = new Menu ("Tests");
+        var testsMenu = new Menu("Tests");
 
         planetsMenu.addMenuItem("Show Planets", planetDao::showAllPlanets);
+        planetsMenu.addMenuItem("Show Planets", () -> System.out.println(planetDao.findPlanet(InputReader.inputString("Enter planet name: "))));
         planetsMenu.addMenuItem("Insert planet", planetDao::insertPlanetInput);
         planetsMenu.addMenuItem("Show Planets", planetDao::showPlanetsMoons);
         planetsMenu.addMenuItem("Delete planet", () -> planetDao.deletePlanet(InputReader.inputString("Enter the name of planet to delete: ")));

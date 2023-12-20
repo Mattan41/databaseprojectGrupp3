@@ -21,6 +21,21 @@ public class PlanetDao {
         em.close();
     }
 
+    public Planet findPlanet(String planetName) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            TypedQuery<Planet> query = em.createQuery("SELECT p FROM Planet p WHERE p.planetName = :planetName", Planet.class);
+            query.setParameter("planetName", planetName);
+
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            System.out.println("No planet found with the name: " + planetName);
+            return null; // or alternatively, you can throw a custom exception
+        } finally {
+            em.close();
+        }
+    }
+
     public void insertPlanetInput() {
 
         var planetName = InputReader.inputString("Enter planet name: ");
@@ -129,5 +144,6 @@ public class PlanetDao {
 
     }
 }
+
 
 
