@@ -167,8 +167,19 @@ public class PlanetDao {
         return count > 0;
     }
 
-    public void showMoonsForPlanet() {
-
+    public void getMoonsOfPlanet(String planetName) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            TypedQuery<Moon> query = em.createQuery(
+                    "SELECT m FROM Moon m INNER JOIN Planet p ON m.planetId = p.id WHERE p.planetName = :planetName",
+                    Moon.class
+            );
+            query.setParameter("planetName", planetName);
+            List<Moon> moons = query.getResultList();
+            moons.forEach(System.out::println);
+        } finally {
+            em.close();
+        }
     }
 }
 

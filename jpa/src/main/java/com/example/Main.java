@@ -33,16 +33,19 @@ public class Main {
         planetsMenu.addMenuItem("Update planet", planetDao::updatePlanetInput);
         planetsMenu.addMenuItem("Statistics", planetDao::planetStatistics);
 
-        moonMenu.addMenuItem("Show moons", moonDao::showAllMoons);0
-        moonMenu.addMenuItem("Insert moon", moonDao::insertMoon);
+        moonMenu.addMenuItem("Show all moons", moonDao::showAllMoons);
+        moonMenu.addMenuItem("Insert moon", moonDao::insertMoonInput);
         moonMenu.addMenuItem("Update moon", moonDao::updateMoonInput);
         moonMenu.addMenuItem("Delete moon", () -> moonDao.deleteMoon(InputReader.inputString("Enter the name of the moon to delete:")));
 
-        solarSystemMenu.addMenuItem("Show solar systems", solarSystemDao::showAllSolarSystems);
+        solarSystemMenu.addMenuItem("Show all solar systems", solarSystemDao::showAllSolarSystems);
+        solarSystemMenu.addMenuItem("Insert solar systems", solarSystemDao::insertSolarSystemInput);
 
-        studentMenu.addMenuItem("Show students", studentDao::showAllStudents);
+        studentMenu.addMenuItem("Show all students", studentDao::showAllStudents);
+        studentMenu.addMenuItem("insert students", studentDao::insertStudentInput);
 
-        testsMenu.addMenuItem("Show tests", testsDao::showAllTests);
+        testsMenu.addMenuItem("Show all tests", testsDao::showAllTests);
+        testsMenu.addMenuItem("Add test", testsDao::insertTestInput);
 
         mainMenu.addMenuItem("Planet", planetsMenu::displayMenu);
         mainMenu.addMenuItem("Moon", moonMenu::displayMenu);

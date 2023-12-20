@@ -24,20 +24,18 @@ public class StudentDao {
         }
     }
 
-    public static void insertStudent() {
-        EntityManager em = JPAUtil.getEntityManager();
+    public void insertStudentInput() {
 
         var studentName = InputReader.inputString("Enter the students name: ");
         var studentSocSecNr = InputReader.inputInt("Enter the students Social Security Number: ");
         var studentAge = InputReader.inputInt("Enter the students Age: ");
         var totResult = InputReader.inputDouble("Enter the students total Score: ");
 
-        // Validate user input
-        if (studentName == null || studentSocSecNr <= 0 || studentAge <= 0 || totResult < 0) {
-            System.out.println("Invalid input.");
-            return;
-        }
+        insertStudent(studentName, studentAge, studentSocSecNr, totResult);
+    }
 
+    private static void insertStudent(String studentName, int studentAge, int studentSocSecNr, double totResult) {
+        EntityManager em = JPAUtil.getEntityManager();
         try {
             em.getTransaction().begin();
 

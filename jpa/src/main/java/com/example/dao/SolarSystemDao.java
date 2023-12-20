@@ -28,13 +28,18 @@ public class SolarSystemDao {
     }
 
 
-    public void insertSolarSystem() {
+    public void insertSolarSystemInput() {
         var solarSystemName = InputReader.inputString("Enter solar system to add: ");
         if (solarSystemExist(solarSystemName)) {
             System.out.println(solarSystemName + " already in database");
             return;
         }
         var galaxyName = InputReader.inputString("Enter galaxy name");
+
+        insertSolarSystem(solarSystemName, galaxyName);
+    }
+
+    private static void insertSolarSystem(String solarSystemName, String galaxyName) {
         inTransaction(entityManager -> {
             try {
                 SolarSystem solarSystem = new SolarSystem();
@@ -45,6 +50,7 @@ public class SolarSystemDao {
             }catch (Exception e) {throw e;}
         });
     }
+
     public void updateSolarSystemInput() {
         var currentName = InputReader.inputString("Enter the name of the solar system you want to update:");
         if (!solarSystemExist(currentName)) {

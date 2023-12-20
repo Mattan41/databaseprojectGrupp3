@@ -10,22 +10,20 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TestDao {
-     static EntityManager em = JPAUtil.getEntityManager();
 
-    public static void createTest() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter test name to add: ");
-        String testName = scanner.nextLine();
-        System.out.print("Enter test score: ");
-        Double testScore = Double.parseDouble(scanner.nextLine());
-        System.out.print("Enter student test ID: ");
-        Integer studentTestId = Integer.parseInt(scanner.nextLine());
 
-        if (testName == null || testName.isEmpty() || testScore <= 0) {
-            System.out.println("Invalid input.");
-            return;
-        }
+    public void insertTestInput() {
 
+        String testName = InputReader.inputString("Enter test name: ");
+        Double testScore = InputReader.inputDouble("Enter test score: ");
+        Integer studentTestId =InputReader.inputInt("Enter student test ID: ");
+
+        insertTest(testName, testScore, studentTestId);
+        System.out.println(testName + " added for student");
+    }
+
+    private static void insertTest(String testName, Double testScore, Integer studentTestId) {
+        EntityManager em = JPAUtil.getEntityManager();
         Test test = new Test();
         test.setTestName(testName);
         test.setTestScore(testScore);
@@ -46,6 +44,7 @@ public class TestDao {
 
     // Visa alla tester
     public void showAllTests() {
+        EntityManager em = JPAUtil.getEntityManager();
         try {
             TypedQuery<Test> query = em.createQuery("SELECT t FROM Test t", Test.class);
             List<Test> tests = query.getResultList();
@@ -56,38 +55,6 @@ public class TestDao {
             em.close();
         }
     }
-
-    public void insertTest() {
-        EntityManager em = JPAUtil.getEntityManager();
-
-        var testName = InputReader.inputString("Enter the test: ");
-        var testScore = InputReader.inputDouble("Enter the score: ");
-        var student = InputReader.inputString("Enter the student: ");
-        // TODO: MATS - Här tänker jag att man får hämta studentTestId från student -> metod i inputReader?
-
-
-
-        try {
-            em.getTransaction().begin();
-
-            Test test = new Test();
-            test.setTestName(testName);
-            test.setTestScore(testScore);
-            //test.setStudentTest(studentTestId);
-
-
-            em.persist(test);
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            System.err.println("Error occurred: " + e.getMessage());
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-        } finally {
-            em.close();
-        }
-    }
-
 
     private static void handleException(Exception e) {
         e.printStackTrace();

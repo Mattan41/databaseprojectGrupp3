@@ -29,7 +29,7 @@ public class MoonDao {
         e.printStackTrace();
     }
 
-    public void insertMoon() {
+    public void insertMoonInput() {
 
         var moonName = InputReader.inputString("Enter moon to add: ");
         if (moonExist(moonName)) {
@@ -38,13 +38,12 @@ public class MoonDao {
         }
 
         Double moonSize = InputReader.inputDouble("Enter moon size");
-        if (moonSize <= 0) {
-            System.out.println("Invalid input.");
-            return;
-        }
-
         var planetId = InputReader.inputInt("Enter moonId: ");
 
+        insertMoon(moonName, moonSize, planetId);
+    }
+
+    private static void insertMoon(String moonName, Double moonSize, int planetId) {
         inTransaction(entityManager -> {
             try {
                 Moon moon = new Moon();
