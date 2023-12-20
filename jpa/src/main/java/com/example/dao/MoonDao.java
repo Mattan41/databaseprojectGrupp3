@@ -38,7 +38,7 @@ public class MoonDao {
         }
 
         Double moonSize = InputReader.inputDouble("Enter moon size");
-        var planetId = InputReader.inputInt("Enter moonId: ");
+        var planetId = InputReader.inputInt("Enter planetId: ");
 
         insertMoon(moonName, moonSize, planetId);
     }

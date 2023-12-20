@@ -57,7 +57,7 @@ public class SolarSystemDao {
                 solarSystem.setSolarSystemName(solarSystemName);
                 solarSystem.setGalaxyName(galaxyName);
                 entityManager.persist(solarSystem);
-                System.out.println("'Solar system " + solarSystem + " added to the database!");
+                System.out.println("Solar system " + solarSystem + " added to the database!");
             }catch (Exception e) {throw e;}
         });
     }
