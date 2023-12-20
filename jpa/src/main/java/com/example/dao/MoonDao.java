@@ -1,22 +1,21 @@
 package com.example.dao;
 
 import com.example.JPAUtil;
+import com.example.Main;
 import com.example.entities.Moon;
 import com.example.entities.Planet;
 import com.example.util.InputReader;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.NoResultException;
-import jakarta.persistence.TypedQuery;
+import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 public class MoonDao {
 
     // Visa alla månar
     public void showAllMoons() {
-        inTransaction(EntityManager -> {
+        Main.inTransaction(EntityManager -> {
             try {
                 TypedQuery<Moon> query = EntityManager.createQuery("SELECT m FROM Moon m", Moon.class);
                 List<Moon> moons = query.getResultList();
@@ -24,6 +23,7 @@ public class MoonDao {
             }catch (Exception e) {throw e;}
         });
     }
+
 
     private static void handleException(Exception e) {
         e.printStackTrace();
@@ -44,7 +44,7 @@ public class MoonDao {
     }
 
     private static void insertMoon(String moonName, Double moonSize, int planetId) {
-        inTransaction(entityManager -> {
+        Main.inTransaction(entityManager -> {
             try {
                 Moon moon = new Moon();
                 moon.setName(moonName);
@@ -58,11 +58,14 @@ public class MoonDao {
 
 
     public static boolean moonExist(String moonName) {
-            EntityManager em = JPAUtil.getEntityManager();
-            TypedQuery<Long> countQuery = em.createQuery("SELECT COUNT(m) FROM Moon m WHERE m.name = :moonName", Long.class);
+        AtomicBoolean exit = new AtomicBoolean();
+        Main.inTransaction(entityManager -> {
+            TypedQuery<Long> countQuery = entityManager.createQuery("SELECT COUNT(m) FROM Moon m WHERE m.name = :moonName", Long.class);
             countQuery.setParameter("moonName", moonName);
             long count = countQuery.getSingleResult();
-        return count > 0;
+            exit.set(count > 0);
+        });
+        return exit.get();
     }
 
     public void updateMoonInput() {
@@ -78,7 +81,7 @@ public class MoonDao {
     }
 
     public void updateMoon(String currentName, String newName, double newSize, int planetId) {
-        inTransaction(entityManager -> {
+        Main.inTransaction(entityManager -> {
             try {
                 TypedQuery<Moon> query = entityManager.createQuery("SELECT m FROM Moon m WHERE m.name = :name", Moon.class);
                 query.setParameter("name", currentName);
@@ -92,9 +95,9 @@ public class MoonDao {
         });
     }
 
-    public void deleteMoon(String moonName) {
+    public void deleteMoon(String  moonName) {
         if (moonExist(moonName)) {
-            inTransaction(entityManager -> {
+            Main.inTransaction(entityManager -> {
                 try {
                     TypedQuery<Moon> query = entityManager.createQuery("SELECT m FROM Moon m WHERE m.name = :name", Moon.class);
                     query.setParameter("name", moonName);
@@ -106,19 +109,42 @@ public class MoonDao {
         } else System.out.println("Moon " + moonName + " does not exist.");
     }
 
-    static void inTransaction(Consumer<EntityManager> work) {
-        try (EntityManager entityManager = JPAUtil.getEntityManager()) {
-            EntityTransaction transaction = entityManager.getTransaction();
-            try {
-                transaction.begin();
-                work.accept(entityManager);
-                transaction.commit();
-            } catch (Exception e) {
-                if (transaction.isActive()) transaction.rollback();
-                throw e;
-            }finally {
-                entityManager.close();
+    public void moonStatistics() {
+        EntityManager em = JPAUtil.getEntityManager();
+
+        try {
+            em.getTransaction().begin();
+            // Average moon size
+            Query avgMoonSizeQuery = em.createQuery("SELECT AVG(m.size) FROM Moon m");
+            Double averageMoonSize = (Double) avgMoonSizeQuery.getSingleResult();
+            System.out.println("Average Moon Size: " + averageMoonSize);
+            // Smallest moon
+            Query smallestMoonQuery = em.createQuery("SELECT m FROM Moon m WHERE m.size = (SELECT MIN(m2.size) FROM Moon m2)");
+            Moon smallestMoon = (Moon) smallestMoonQuery.getSingleResult();
+
+            if (smallestMoon != null) {
+                System.out.println("Smallest moon: " + smallestMoon.getName() + " - Size: " + smallestMoon.getSize());
+            } else {
+                System.out.println("No moon found.");
             }
+            // Biggest moon
+            Query biggestMoonQuery = em.createQuery("SELECT m FROM Moon m WHERE m.size = (SELECT MAX(m3.size) FROM Moon m3)");
+            Moon biggestMoon = (Moon) biggestMoonQuery.getSingleResult();
+
+            if (biggestMoon != null) {
+                System.out.println("Biggest moon: " + biggestMoon.getName() + " - Size: " + biggestMoon.getSize());
+            } else {
+                System.out.println("No moon found.");
+            }
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            System.err.println("Error occurred while generating moon statistics: " + e.getMessage());
+        } finally {
+            em.close();
         }
     }
 }

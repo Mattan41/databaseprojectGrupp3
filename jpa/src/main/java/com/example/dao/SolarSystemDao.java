@@ -1,20 +1,23 @@
 package com.example.dao;
 
 import com.example.JPAUtil;
+import com.example.Main;
 import com.example.entities.Moon;
 import com.example.entities.SolarSystem;
 import com.example.util.InputReader;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 public class SolarSystemDao {
 
 
     public void showAllSolarSystems() {
-        inTransaction(EntityManager -> {
+        Main.inTransaction(EntityManager -> {
             try {
                 TypedQuery<SolarSystem> query = EntityManager.createQuery("SELECT s FROM SolarSystem s", SolarSystem.class);
                 List<SolarSystem> solarSystems = query.getResultList();
@@ -23,10 +26,18 @@ public class SolarSystemDao {
         });
     }
 
-    private static void handleException(Exception e) {
-        e.printStackTrace();
+    public long countSolarSystems() {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            Query query = em.createQuery("SELECT COUNT(s) FROM SolarSystem s");
+            return (long) query.getSingleResult();
+        } catch (Exception e) {
+            System.out.println("Error occurred: " + e.getMessage());
+            return 0;
+        } finally {
+            em.close();
+        }
     }
-
 
     public void insertSolarSystemInput() {
         var solarSystemName = InputReader.inputString("Enter solar system to add: ");
@@ -40,7 +51,7 @@ public class SolarSystemDao {
     }
 
     private static void insertSolarSystem(String solarSystemName, String galaxyName) {
-        inTransaction(entityManager -> {
+        Main.inTransaction(entityManager -> {
             try {
                 SolarSystem solarSystem = new SolarSystem();
                 solarSystem.setSolarSystemName(solarSystemName);
@@ -63,7 +74,7 @@ public class SolarSystemDao {
     }
 
     public void updateSolarSystem(String currentName, String newName, String galaxyName) {
-        inTransaction(entityManager -> {
+        Main.inTransaction(entityManager -> {
             try {
                 TypedQuery<SolarSystem> query = entityManager.createQuery("SELECT s FROM SolarSystem s WHERE s.solarSystemName = :solarSystemName", SolarSystem.class);
                 query.setParameter("solarSystemName", currentName);
@@ -77,7 +88,7 @@ public class SolarSystemDao {
     }
     public void deleteSolarSystem(String solarSystemName) {
         if (solarSystemExist(solarSystemName)) {
-            inTransaction(entityManager -> {
+            Main.inTransaction(entityManager -> {
                 try {
                     TypedQuery<SolarSystem> query = entityManager.createQuery("SELECT s FROM SolarSystem s WHERE s.solarSystemName = :solarSystemName", SolarSystem.class);
                     query.setParameter("solarSystemName", solarSystemName);
@@ -88,28 +99,16 @@ public class SolarSystemDao {
             });
         } else System.out.println("Solar system " + solarSystemName + " does not exist.");
     }
+
     public static boolean solarSystemExist(String solarSystemName) {
-        EntityManager em = JPAUtil.getEntityManager();
-        TypedQuery<Long> countQuery = em.createQuery("SELECT COUNT(s) FROM SolarSystem s WHERE s.solarSystemName = :solarSystemName", Long.class);
-        countQuery.setParameter("solarSystemName", solarSystemName);
-        long count = countQuery.getSingleResult();
-        return count > 0;
-    }
-
-
-    static void inTransaction(Consumer<EntityManager> work) {
-        try (EntityManager entityManager = JPAUtil.getEntityManager()) {
-            EntityTransaction transaction = entityManager.getTransaction();
-            try {
-                transaction.begin();
-                work.accept(entityManager);
-                transaction.commit();
-            } catch (Exception e) {
-                if (transaction.isActive()) transaction.rollback();
-                throw e;
-            }finally {
-                entityManager.close();
-            }
-        }
+        AtomicBoolean exit = new AtomicBoolean(false);
+        Main.inTransaction(entityManager -> {
+            TypedQuery<Long> countQuery = entityManager.createQuery(
+                    "SELECT COUNT(s) FROM SolarSystem s WHERE s.solarSystemName = :solarSystemName", Long.class);
+            countQuery.setParameter("solarSystemName", solarSystemName);
+            long count = countQuery.getSingleResult();
+            exit.set(count > 0);
+        });
+        return exit.get();
     }
 }

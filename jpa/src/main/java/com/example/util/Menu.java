@@ -22,7 +22,7 @@ public class Menu {
             for (int i = 0; i < menuItems.size(); i++) {
                 System.out.println((i + 1) + " - " + menuItems.get(i).description());
             }
-            System.out.println("0. Exit");
+            System.out.println("0 - Exit");
 
             int choice = InputReader.inputInt("Choose an option: ");
 

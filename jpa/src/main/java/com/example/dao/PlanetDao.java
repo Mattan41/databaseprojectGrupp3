@@ -1,6 +1,7 @@
 package com.example.dao;
 
 import com.example.JPAUtil;
+import com.example.entities.Moon;
 import com.example.entities.Planet;
 import com.example.util.InputReader;
 import jakarta.persistence.*;
@@ -73,11 +74,14 @@ public class PlanetDao {
 
     public void updatePlanetInput() {
         var currentName = InputReader.inputString("Enter the name of the planet you want to update:");
+        if(!planetExist(currentName)) {
+            System.out.println("Planet " + currentName + " does not exist.");
+            return;
+        }
         var newName = InputReader.inputString("Enter the new name:");
         var newSize = InputReader.inputInt("Enter the new size:");
         var newType = InputReader.inputString("Enter the new type:");
-        if (planetExist(currentName)) updatePlanet(currentName, newName, newSize, newType);
-        else System.out.println("Planet " + currentName + " does not exist.");
+        updatePlanet(currentName, newName, newSize, newType);
     }
 
     public void updatePlanet(String currentName, String newName, int newSize, String newType) {
@@ -133,16 +137,25 @@ public class PlanetDao {
 
         try {
             em.getTransaction().begin();
-
+            // Average planet size
             Query avgSizeQuery = em.createQuery("SELECT AVG(p.planetSize) FROM Planet p");
             Double averageSize = (Double) avgSizeQuery.getSingleResult();
             System.out.println("Average Planet Size: " + averageSize);
-
+            // Smallest planet
             Query smallestQuery = em.createQuery("SELECT p FROM Planet p WHERE p.planetSize = (SELECT MIN(p2.planetSize) FROM Planet p2)");
             Planet smallestPlanet = (Planet) smallestQuery.getSingleResult();
 
             if (smallestPlanet != null) {
                 System.out.println("Smallest Planet: " + smallestPlanet.getPlanetName() + " - Size: " + smallestPlanet.getPlanetSize());
+            } else {
+                System.out.println("No planet found.");
+            }
+            // Biggest planet
+            Query biggestQuery = em.createQuery("SELECT p FROM Planet p WHERE p.planetSize = (SELECT MAX(p3.planetSize) FROM Planet p3)");
+            Planet biggestPlanet = (Planet) biggestQuery.getSingleResult();
+
+            if (biggestPlanet != null) {
+                System.out.println("Biggest Planet: " + biggestPlanet.getPlanetName() + " - Size: " + biggestPlanet.getPlanetSize());
             } else {
                 System.out.println("No planet found.");
             }
