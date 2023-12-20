@@ -16,16 +16,13 @@ public class MoonDao {
 
     // Visa alla månar
     public void showAllMoons() {
-        EntityManager em = JPAUtil.getEntityManager();
-        try {
-            TypedQuery<Moon> query = em.createQuery("SELECT m FROM Moon m", Moon.class);
-            List<Moon> moons = query.getResultList();
-            moons.forEach(System.out::println);
-        } catch (Exception e) {
-            handleException(e);
-        } finally {
-            em.close();
-        }
+        inTransaction(EntityManager -> {
+            try {
+                TypedQuery<Moon> query = EntityManager.createQuery("SELECT m FROM Moon m", Moon.class);
+                List<Moon> moons = query.getResultList();
+                moons.forEach(System.out::println);
+            }catch (Exception e) {throw e;}
+        });
     }
 
     private static void handleException(Exception e) {
@@ -71,11 +68,14 @@ public class MoonDao {
 
     public void updateMoonInput() {
         var currentName = InputReader.inputString("Enter the name of the moon you want to update:");
+        if (!moonExist(currentName)) {
+            System.out.println("Moon " + currentName + " does not exist.");
+            return;
+        }
         var newName = InputReader.inputString("Enter the new name:");
         var newSize = InputReader.inputDouble("Enter the new size:");
         var planetId = InputReader.inputInt("Enter moon id:");
-        if (moonExist(currentName)) updateMoon(currentName, newName, newSize, planetId);
-        else System.out.println("Moon " + currentName + " does not exist.");
+        updateMoon(currentName, newName, newSize, planetId);
     }
 
     public void updateMoon(String currentName, String newName, double newSize, int planetId) {
