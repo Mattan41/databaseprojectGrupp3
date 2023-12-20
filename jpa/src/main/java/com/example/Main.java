@@ -26,7 +26,7 @@ public class Main {
         var testsMenu = new Menu ("Tests");
 
         planetsMenu.addMenuItem("Show Planets", planetDao::showAllPlanets);
-        planetsMenu.addMenuItem("Insert planet", planetDao::insertPlanet);
+        planetsMenu.addMenuItem("Insert planet", planetDao::insertPlanetInput);
         planetsMenu.addMenuItem("Show Planets", planetDao::showPlanetsMoons);
         planetsMenu.addMenuItem("Delete planet", () -> planetDao.deletePlanet(InputReader.inputString("Enter the name of planet to delete: ")));
         planetsMenu.addMenuItem("Update planet", planetDao::updatePlanetInput);

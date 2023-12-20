@@ -9,7 +9,6 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class PlanetDao {
 //    EntityManager em = JPAUtil.getEntityManager();
@@ -22,19 +21,22 @@ public class PlanetDao {
         em.close();
     }
 
-    public void insertPlanet() {
-        EntityManager em = JPAUtil.getEntityManager();
+    public void insertPlanetInput() {
 
         var planetName = InputReader.inputString("Enter planet name: ");
+        if (planetExist(planetName)) {
+            System.out.println(planetName + " already in database");
+            return;
+        }
         var planetSize = InputReader.inputInt("Enter size: ");
         var planetType = InputReader.inputString("Enter planet type: ");
         var solarSystemId = InputReader.inputInt("Enter solar system Id: ");
 
-        // Validate user input
-        if (planetName == null || planetName.isEmpty() || planetSize <= 0 || planetType == null || planetType.isEmpty()) {
-            System.out.println("Invalid input.");
-            return;
-        }
+        insertPlanet(planetName, planetSize, planetType, solarSystemId);
+    }
+
+    private static void insertPlanet(String planetName, int planetSize, String planetType, int solarSystemId) {
+        EntityManager em = JPAUtil.getEntityManager();
 
         try {
             em.getTransaction().begin();
