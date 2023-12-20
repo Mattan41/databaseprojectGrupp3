@@ -110,7 +110,7 @@ public class StudentDao {
             // Average student score
             Query avgStudentScoreQuery = em.createQuery("SELECT AVG(s.totResult) FROM Student s");
             Double averageStudentscore = (Double) avgStudentScoreQuery.getSingleResult();
-            System.out.println("Average Moon Size: " + averageStudentscore);
+            System.out.println("Average student score: " + averageStudentscore);
             
             // student with the lowest score
             Query lowestScoreStudentQuery = em.createQuery("SELECT s FROM Student s WHERE s.totResult = (SELECT MIN(s2.totResult) FROM Student s2)");

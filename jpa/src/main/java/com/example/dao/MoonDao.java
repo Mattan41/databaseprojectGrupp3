@@ -76,7 +76,7 @@ public class MoonDao {
         }
         var newName = InputReader.inputString("Enter the new name:");
         var newSize = InputReader.inputDouble("Enter the new size:");
-        var planetId = InputReader.inputInt("Enter moon id:");
+        var planetId = InputReader.inputInt("Enter planet id:");
         updateMoon(currentName, newName, newSize, planetId);
     }
 
