@@ -140,7 +140,7 @@ public class PlanetDao {
         return count > 0;
     }
 
-    public void showPlanetsMoons() {
+    public void showMoonsForPlanet() {
 
     }
 }

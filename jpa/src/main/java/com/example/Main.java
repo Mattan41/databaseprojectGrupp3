@@ -26,13 +26,13 @@ public class Main {
         var testsMenu = new Menu("Tests");
 
         planetsMenu.addMenuItem("Show Planets", planetDao::showAllPlanets);
-        planetsMenu.addMenuItem("Show Planets", () -> System.out.println(planetDao.findPlanet(InputReader.inputString("Enter planet name: "))));
+        planetsMenu.addMenuItem("Find a planet", () -> System.out.println(planetDao.findPlanet(InputReader.inputString("Enter planet name: "))));
         planetsMenu.addMenuItem("Insert planet", planetDao::insertPlanetInput);
-        planetsMenu.addMenuItem("Show Planets", planetDao::showPlanetsMoons);
+        planetsMenu.addMenuItem("Show the moons of a planet", planetDao::showMoonsForPlanet);
         planetsMenu.addMenuItem("Delete planet", () -> planetDao.deletePlanet(InputReader.inputString("Enter the name of planet to delete: ")));
         planetsMenu.addMenuItem("Update planet", planetDao::updatePlanetInput);
 
-        moonMenu.addMenuItem("Show moons", moonDao::showAllMoons);
+        moonMenu.addMenuItem("Show moons", moonDao::showAllMoons);0
         moonMenu.addMenuItem("Insert moon", moonDao::insertMoon);
         moonMenu.addMenuItem("Update moon", moonDao::updateMoonInput);
         moonMenu.addMenuItem("Delete moon", () -> moonDao.deleteMoon(InputReader.inputString("Enter the name of the moon to delete:")));
