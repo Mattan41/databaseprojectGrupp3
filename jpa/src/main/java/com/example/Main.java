@@ -31,6 +31,7 @@ public class Main {
         planetsMenu.addMenuItem("Show the moons of a planet", planetDao::showMoonsForPlanet);
         planetsMenu.addMenuItem("Delete planet", () -> planetDao.deletePlanet(InputReader.inputString("Enter the name of planet to delete: ")));
         planetsMenu.addMenuItem("Update planet", planetDao::updatePlanetInput);
+        planetsMenu.addMenuItem("Statistics", planetDao::planetStatistics);
 
         moonMenu.addMenuItem("Show moons", moonDao::showAllMoons);0
         moonMenu.addMenuItem("Insert moon", moonDao::insertMoon);

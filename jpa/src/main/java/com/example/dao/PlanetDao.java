@@ -3,10 +3,7 @@ package com.example.dao;
 import com.example.JPAUtil;
 import com.example.entities.Planet;
 import com.example.util.InputReader;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.NoResultException;
-import jakarta.persistence.TypedQuery;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -128,6 +125,36 @@ public class PlanetDao {
                 transaction.rollback();
             }
             System.err.println("Error occurred: " + e.getMessage());
+        }
+    }
+
+    public void planetStatistics() {
+        EntityManager em = JPAUtil.getEntityManager();
+
+        try {
+            em.getTransaction().begin();
+
+            Query avgSizeQuery = em.createQuery("SELECT AVG(p.planetSize) FROM Planet p");
+            Double averageSize = (Double) avgSizeQuery.getSingleResult();
+            System.out.println("Average Planet Size: " + averageSize);
+
+            Query smallestQuery = em.createQuery("SELECT p FROM Planet p WHERE p.planetSize = (SELECT MIN(p2.planetSize) FROM Planet p2)");
+            Planet smallestPlanet = (Planet) smallestQuery.getSingleResult();
+
+            if (smallestPlanet != null) {
+                System.out.println("Smallest Planet: " + smallestPlanet.getPlanetName() + " - Size: " + smallestPlanet.getPlanetSize());
+            } else {
+                System.out.println("No planet found.");
+            }
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            System.err.println("Error occurred while generating planet statistics: " + e.getMessage());
+        } finally {
+            em.close();
         }
     }
 
