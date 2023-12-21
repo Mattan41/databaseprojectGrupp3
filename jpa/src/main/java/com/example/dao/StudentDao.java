@@ -13,11 +13,9 @@ public class StudentDao {
     // Visa alla studenter
     public void showAllStudents() {
         Main.inTransaction(EntityManager-> {
-            try {
-                TypedQuery<Student> query = EntityManager.createQuery("SELECT s FROM Student s", Student.class);
-                List<Student> students = query.getResultList();
-                students.forEach(System.out::println);
-            }catch (Exception e) {throw e;}
+            TypedQuery<Student> query = EntityManager.createQuery("SELECT s FROM Student s", Student.class);
+            List<Student> students = query.getResultList();
+            students.forEach(System.out::println);
         });
     }
 
@@ -76,30 +74,26 @@ public class StudentDao {
 
     public void updateStudent(String currentName, String studentName, int studentSocSecNr, int studentAge, double totResult) {
         Main.inTransaction(entityManager -> {
-            try {
-                TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s WHERE s.studentName = :studentName", Student.class);
-                query.setParameter("studentName", currentName);
-                Student student = query.getSingleResult();
-                student.setStudentName(studentName);
-                student.setStudentSocialSecNum(studentSocSecNr);
-                student.setStudentAge(studentAge);
-                student.setTotResult(totResult);
-                entityManager.merge(student);
-                System.out.println("Student " + currentName + " updated to [name:" + studentName + " social sec num:" + studentSocSecNr + " age:" + studentAge + " total result:" + totResult + "]");
-            } catch (Exception e) {throw e;}
+            TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s WHERE s.studentName = :studentName", Student.class);
+            query.setParameter("studentName", currentName);
+            Student student = query.getSingleResult();
+            student.setStudentName(studentName);
+            student.setStudentSocialSecNum(studentSocSecNr);
+            student.setStudentAge(studentAge);
+            student.setTotResult(totResult);
+            entityManager.merge(student);
+            System.out.println("Student " + currentName + " updated to [name:" + studentName + " social sec num:" + studentSocSecNr + " age:" + studentAge + " total result:" + totResult + "]");
         });
     }
 
     public void deleteStudent(String studentName) {
         if (studentExist(studentName)) {
             Main.inTransaction(entityManager -> {
-                try {
-                    TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s WHERE s.studentName = :studentName", Student.class);
-                    query.setParameter("studentName", studentName);
-                    Student student = query.getSingleResult();
-                    entityManager.remove(student);
-                    System.out.println("Student " + studentName + " is deleted!");
-                } catch (Exception e) {throw e;}
+                TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s WHERE s.studentName = :studentName", Student.class);
+                query.setParameter("studentName", studentName);
+                Student student = query.getSingleResult();
+                entityManager.remove(student);
+                System.out.println("Student " + studentName + " is deleted!");
             });
         } else System.out.println("Student " + studentName + " does not exist.");
     }
@@ -156,7 +150,4 @@ public class StudentDao {
         }
     }
 
-    private static void handleException(Exception e) {
-        e.printStackTrace();
-    }
 }
