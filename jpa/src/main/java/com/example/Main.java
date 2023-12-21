@@ -45,6 +45,7 @@ public class Main {
 
         studentMenu.addMenuItem("Show all students", studentDao::showAllStudents);
         studentMenu.addMenuItem("Find student", () -> System.out.println(studentDao.findStudent(InputReader.inputString("Enter the students name: "))));
+        studentMenu.addMenuItem("Show all tests from one Student", () -> studentDao.getAllTestsOfOneStudent(InputReader.inputString("Enter the Students id:")));
         studentMenu.addMenuItem("Insert students", studentDao::insertStudentInput);
         studentMenu.addMenuItem("Update student", studentDao::updateStudentInput);
         studentMenu.addMenuItem("Delete student", () -> studentDao.deleteStudent(InputReader.inputString("Enter the name of the student to delete:")));

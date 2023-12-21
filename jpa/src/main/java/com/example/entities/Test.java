@@ -18,6 +18,7 @@ public class Test {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "studentTestId")
+
     private Student studentTest;
 
     public Integer getId() {

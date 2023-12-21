@@ -7,6 +7,7 @@ import com.example.dtos.StudentDto;
 import com.example.util.InputReader;
 import jakarta.persistence.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -22,7 +23,7 @@ public class StudentDao {
     }
 
     //Using dto to show only name and age:
-    public void showAllStudentsWithDto(){
+    public void showAllStudentsDto(){
         EntityManager em = JPAUtil.getEntityManager();
 
         var query = em.createQuery("""
@@ -36,20 +37,28 @@ public class StudentDao {
     }
 
 
-    public Student findStudent(String studentName) {
+    public List<Student> findStudent(String studentName) {
         try (EntityManager em = JPAUtil.getEntityManager()) {
             TypedQuery<Student> query = em.createNamedQuery("student.findByName", Student.class);
             query.setParameter("studentName", studentName);
+            return query.getResultList();
 
-            return query.getSingleResult();
         } catch (NoResultException e) {
-            System.out.println("No student  found with the name: " + studentName);
+            System.out.println("No student found with the name: " + studentName);
             return null; // or alternatively, you can throw a custom exception
         }
     }
 
     // TODO: Show all test for one student
+    public void getAllTestsOfOneStudent(String id) {
 
+        EntityManager em = JPAUtil.getEntityManager();
+            Student student = em.find(Student.class, id);
+            System.out.println(student.getStudentName());
+            student.getTests().forEach(test -> System.out.println(test.getTestName()));
+            em.close();
+
+    }
     // TODO: Show all student that ends with: ...Anka
 
     // TODO: show average score per test for one student
@@ -76,21 +85,25 @@ public class StudentDao {
     }
     public void updateStudentInput() {
         var currentName = InputReader.inputString("Enter the name of the student you want to update:");
-        if (!studentExist(currentName)) {
+        var currentSocSecNum = InputReader.inputInt("Enter the social security number of the student:");
+
+        if (!studentIdExist(currentSocSecNum)) {
             System.out.println("Student " + currentName + " does not exist.");
             return;
         }
+
+
         var studentName = InputReader.inputString("Enter the students name: ");
         var studentSocSecNr = InputReader.inputInt("Enter the students Social Security Number: ");
         var studentAge = InputReader.inputInt("Enter the students Age: ");
         var totResult = InputReader.inputDouble("Enter the students total Score: ");
-        updateStudent(currentName, studentName, studentSocSecNr, studentAge,totResult);
+        updateStudent(currentName, currentSocSecNum, studentName, studentSocSecNr, studentAge,totResult);
     }
 
-    public void updateStudent(String currentName, String studentName, int studentSocSecNr, int studentAge, double totResult) {
+    public void updateStudent(String currentName, int studentSocSecNum, String studentName, int studentSocSecNr, int studentAge, double totResult) {
         Main.inTransaction(entityManager -> {
-            TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s WHERE s.studentName = :studentName", Student.class);
-            query.setParameter("studentName", currentName);
+            TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s WHERE s.studentSocialSecNum = :studentSocialSecNum", Student.class);
+            query.setParameter("studentSocialSecNum", studentSocSecNum);
             Student student = query.getSingleResult();
             student.setStudentName(studentName);
             student.setStudentSocialSecNum(studentSocSecNr);
@@ -103,9 +116,14 @@ public class StudentDao {
 
     public void deleteStudent(String studentName) {
         if (studentExist(studentName)) {
+            int studentSocSecNum = InputReader.inputInt("enter the students social security number:");
+            if (!studentIdExist(studentSocSecNum)){
+                System.out.println("Student " + studentName + " does not exist.");
+            return;}
             Main.inTransaction(entityManager -> {
-                TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s WHERE s.studentName = :studentName", Student.class);
-                query.setParameter("studentName", studentName);
+
+                TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s WHERE s.studentSocialSecNum = :studentSocSecNum", Student.class);
+                query.setParameter("studentSocSecNum", studentSocSecNum);
                 Student student = query.getSingleResult();
                 entityManager.remove(student);
                 System.out.println("Student " + studentName + " is deleted!");
@@ -123,6 +141,18 @@ public class StudentDao {
         });
         return exit.get();
     }
+
+    public static boolean studentIdExist(int studentSocSecNum) {
+        AtomicBoolean exit = new AtomicBoolean(false);
+        Main.inTransaction(entityManager -> {
+            TypedQuery<Long> countQuery = entityManager.createQuery("SELECT COUNT(s) FROM Student s WHERE s.studentSocialSecNum = :studentSocSecNum", Long.class);
+            countQuery.setParameter("studentSocSecNum", studentSocSecNum);
+            long count = countQuery.getSingleResult();
+            exit.set(count > 0);
+        });
+        return exit.get();
+    }
+
 
 
     public void studentStatistics() {
