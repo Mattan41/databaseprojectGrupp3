@@ -6,7 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
-@NamedQuery(name = "student.findByName", query = "SELECT m FROM Moon m WHERE m.name = :moonName")
+@NamedQuery(name = "student.findByName", query = "SELECT s FROM Student s WHERE s.studentName = :studentName")
 @Table(name = "student", schema = "planets")
 public class Student {
     @Id
