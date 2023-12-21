@@ -2,18 +2,12 @@ package com.example.dao;
 
 import com.example.JPAUtil;
 import com.example.Main;
-import com.example.entities.Moon;
-import com.example.entities.Planet;
 import com.example.entities.Student;
 import com.example.util.InputReader;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Query;
-import jakarta.persistence.TypedQuery;
+import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
 
 public class StudentDao {
     // Visa alla studenter
@@ -26,6 +20,26 @@ public class StudentDao {
             }catch (Exception e) {throw e;}
         });
     }
+
+
+    public Student findStudent(String studentName) {
+        try (EntityManager em = JPAUtil.getEntityManager()) {
+            TypedQuery<Student> query = em.createNamedQuery("student.findByName", Student.class);
+            query.setParameter("studentName", studentName);
+
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            System.out.println("No student  found with the name: " + studentName);
+            return null; // or alternatively, you can throw a custom exception
+        }
+    }
+
+
+    // TODO: Show all test for one student
+
+    // TODO: Show all student that ends with: ...Anka
+
+    // TODO: show average score per test for one student
 
     public void insertStudentInput() {
 

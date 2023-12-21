@@ -44,6 +44,7 @@ public class Main {
         solarSystemMenu.addMenuItem("Count solar systems", () -> System.out.println("The number of solar systems are " + solarSystemDao.countSolarSystems()));
 
         studentMenu.addMenuItem("Show all students", studentDao::showAllStudents);
+        studentMenu.addMenuItem("Find student", () -> System.out.println(studentDao.findStudent(InputReader.inputString("Enter the students name: "))));
         studentMenu.addMenuItem("Insert students", studentDao::insertStudentInput);
         studentMenu.addMenuItem("Update student", studentDao::updateStudentInput);
         studentMenu.addMenuItem("Delete student", () -> studentDao.deleteStudent(InputReader.inputString("Enter the name of the student to delete:")));
