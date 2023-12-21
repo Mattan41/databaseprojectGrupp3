@@ -71,10 +71,10 @@ public class StudentDao {
         var studentSocSecNr = InputReader.inputInt("Enter the students Social Security Number: ");
         var studentAge = InputReader.inputInt("Enter the students Age: ");
         var totResult = InputReader.inputDouble("Enter the students total Score: ");
-        updateMoon(currentName, studentName, studentSocSecNr, studentAge,totResult);
+        updateStudent(currentName, studentName, studentSocSecNr, studentAge,totResult);
     }
 
-    public void updateMoon(String currentName, String studentName, int studentSocSecNr, int studentAge, double totResult) {
+    public void updateStudent(String currentName, String studentName, int studentSocSecNr, int studentAge, double totResult) {
         Main.inTransaction(entityManager -> {
             try {
                 TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s WHERE s.studentName = :studentName", Student.class);
