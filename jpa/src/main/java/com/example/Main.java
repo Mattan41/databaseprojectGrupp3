@@ -54,7 +54,7 @@ public class Main {
 
         viewStudentMenu.addMenuItem("Show all students", studentDao::showAllStudents);
         viewStudentMenu.addMenuItem("Find student", () -> System.out.println(studentDao.findStudent(InputReader.inputString("Enter the students name: "))));
-        viewStudentMenu.addMenuItem("Show all tests from one Student", () -> studentDao.getAllTestsOfOneStudent(InputReader.inputString("Enter the Students id:")));
+        viewStudentMenu.addMenuItem("Show all tests from one Student", () -> studentDao.getAllTestsOfOneStudent(InputReader.inputInt("Enter the Students Social security number:")));
 
         statisticsMenu.addMenuItem("Statistics", studentDao::studentStatistics);
         statisticsMenu.addMenuItem("Show average score per test for one student", () -> studentDao.studentAvgScorePerTest(InputReader.inputString("Enter the students name: ")));

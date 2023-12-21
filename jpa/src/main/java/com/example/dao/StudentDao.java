@@ -51,19 +51,20 @@ public class StudentDao {
     }
 
 
-    public void getAllTestsOfOneStudent(String id) {
-        // TODO: search on socSecNumber
-        EntityManager em = JPAUtil.getEntityManager();
-            Student student = em.find(Student.class, id);
+    public void getAllTestsOfOneStudent(int studentSocSecNum) {
+
+        if (!studentIdExist(studentSocSecNum)){
+            System.out.println("Student does not exist.");
+            return;}
+
+        Main.inTransaction(EntityManager -> {
+            Student student = getStudentFromSocSecNum(EntityManager, studentSocSecNum);
             System.out.println(student.getStudentName());
             student.getTests().forEach(test -> System.out.println(test.getTestName()));
-            em.close();
-
+            EntityManager.persist(student);
+        });
     }
-    // TODO: Show all student that ends with: ...Anka
 
-    // TODO: show average score per test for one student
-    // todo: show average score per test for students between age input-input
     public void insertStudentInput() {
 
         var studentName = InputReader.inputString("Enter the students name: ");
@@ -123,9 +124,7 @@ public class StudentDao {
             return;}
             Main.inTransaction(entityManager -> {
 
-                TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s WHERE s.studentSocialSecNum = :studentSocSecNum", Student.class);
-                query.setParameter("studentSocSecNum", studentSocSecNum);
-                Student student = query.getSingleResult();
+                Student student = getStudentFromSocSecNum(entityManager, studentSocSecNum);
                 entityManager.remove(student);
                 System.out.println("Student " + studentName + " is deleted!");
             });
@@ -204,11 +203,7 @@ public class StudentDao {
                 return;}
             Main.inTransaction(entityManager -> {
 
-                TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s WHERE s.studentSocialSecNum = :studentSocSecNum", Student.class);
-                query.setParameter("studentSocSecNum", studentSocSecNum);
-
-                Student student = query.getSingleResult();
-
+                Student student = getStudentFromSocSecNum(entityManager, studentSocSecNum);
                 Set<Test> tests = student.getTests();
 
                 for (Test test : tests) {
@@ -221,13 +216,20 @@ public class StudentDao {
 
     }
 
+    private static Student getStudentFromSocSecNum(EntityManager entityManager, int studentSocSecNum) {
+        TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s WHERE s.studentSocialSecNum = :studentSocSecNum", Student.class);
+        query.setParameter("studentSocSecNum", studentSocSecNum);
+
+        Student student = query.getSingleResult();
+        return student;
+    }
+
 
     public void avgScorePerTestForStudentsIntervalInput() {
         int minAge = InputReader.inputInt("enter minimum age: ");
         int maxAge = InputReader.inputInt("enter maximum age: ");
         avgScorePerTestForStudentsInterval(minAge, maxAge);
     }
-
 
     private void avgScorePerTestForStudentsInterval(int minAge, int maxAge) {
 
@@ -237,7 +239,7 @@ public class StudentDao {
             query.setParameter("maxAge", maxAge);
 
             List<Student> students = query.getResultList();
-            System.out.println("Lista med studenter: " + students);
+
             double average = 0;
             double sum = 0;
             int count = 0;
@@ -256,7 +258,5 @@ public class StudentDao {
             System.out.println("Average score for students age " + minAge + " to " + maxAge + " is: " + average);
         });
     }
-
-
 
 }
