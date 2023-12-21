@@ -4,11 +4,12 @@ import com.example.JPAUtil;
 import com.example.Main;
 import com.example.entities.Student;
 import com.example.dtos.StudentDto;
+import com.example.entities.Test;
 import com.example.util.InputReader;
 import jakarta.persistence.*;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class StudentDao {
@@ -62,7 +63,7 @@ public class StudentDao {
     // TODO: Show all student that ends with: ...Anka
 
     // TODO: show average score per test for one student
-
+    // todo: show average score per test for students between age input-input
     public void insertStudentInput() {
 
         var studentName = InputReader.inputString("Enter the students name: ");
@@ -162,8 +163,8 @@ public class StudentDao {
             em.getTransaction().begin();
             // Average student score
             Query avgStudentScoreQuery = em.createQuery("SELECT AVG(s.totResult) FROM Student s");
-            Double averageStudentscore = (Double) avgStudentScoreQuery.getSingleResult();
-            System.out.println("Average student score: " + averageStudentscore);
+            Double averageStudentScore = (Double) avgStudentScoreQuery.getSingleResult();
+            System.out.println("Average student score: " + averageStudentScore);
             
             // student with the lowest score
             Query lowestScoreStudentQuery = em.createQuery("SELECT s FROM Student s WHERE s.totResult = (SELECT MIN(s2.totResult) FROM Student s2)");
@@ -194,5 +195,68 @@ public class StudentDao {
             em.close();
         }
     }
+
+    public void studentAvgScorePerTest(String studentName) {
+        if (studentExist(studentName)) {
+            int studentSocSecNum = InputReader.inputInt("enter the students social security number:");
+            if (!studentIdExist(studentSocSecNum)){
+                System.out.println("Student " + studentName + " does not exist.");
+                return;}
+            Main.inTransaction(entityManager -> {
+
+                TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s WHERE s.studentSocialSecNum = :studentSocSecNum", Student.class);
+                query.setParameter("studentSocSecNum", studentSocSecNum);
+
+                Student student = query.getSingleResult();
+
+                Set<Test> tests = student.getTests();
+
+                for (Test test : tests) {
+                    double testScore = test.getTestScore();
+                    String testName = test.getTestName();
+                    System.out.println("Average score for " + testName + " is " + testScore);
+                }
+            });
+        } else System.out.println("Student " + studentName + " does not exist.");
+
+    }
+
+
+    public void avgScorePerTestForStudentsIntervalInput() {
+        int minAge = InputReader.inputInt("enter minimum age: ");
+        int maxAge = InputReader.inputInt("enter maximum age: ");
+        avgScorePerTestForStudentsInterval(minAge, maxAge);
+    }
+
+
+    private void avgScorePerTestForStudentsInterval(int minAge, int maxAge) {
+
+        Main.inTransaction(entityManager -> {
+            TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s WHERE s.studentAge >= :minAge AND s.studentAge <= :maxAge", Student.class);
+            query.setParameter("minAge", minAge);
+            query.setParameter("maxAge", maxAge);
+
+            List<Student> students = query.getResultList();
+            System.out.println("Lista med studenter: " + students);
+            double average = 0;
+            double sum = 0;
+            int count = 0;
+            for (Student student : students) {
+                Set<Test> tests = student.getTests();
+                for (Test test : tests) {
+                    double testScore = test.getTestScore();
+
+                    sum += testScore;
+                    count++;
+
+
+                }
+            }
+            average = sum / count;
+            System.out.println("Average score for students age " + minAge + " to " + maxAge + " is: " + average);
+        });
+    }
+
+
 
 }

@@ -57,6 +57,10 @@ public class Main {
         viewStudentMenu.addMenuItem("Show all tests from one Student", () -> studentDao.getAllTestsOfOneStudent(InputReader.inputString("Enter the Students id:")));
 
         statisticsMenu.addMenuItem("Statistics", studentDao::studentStatistics);
+        statisticsMenu.addMenuItem("Show average score per test for one student", () -> studentDao.studentAvgScorePerTest(InputReader.inputString("Enter the students name: ")));
+        statisticsMenu.addMenuItem("Show average score for students at age interval: ", studentDao::avgScorePerTestForStudentsIntervalInput);
+
+
 
         testsMenu.addMenuItem("Show all tests", testsDao::showAllTests);
         testsMenu.addMenuItem("Add test", testsDao::insertTestInput);
