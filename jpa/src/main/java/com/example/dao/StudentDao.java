@@ -3,6 +3,7 @@ package com.example.dao;
 import com.example.JPAUtil;
 import com.example.Main;
 import com.example.entities.Student;
+import com.example.dtos.StudentDto;
 import com.example.util.InputReader;
 import jakarta.persistence.*;
 
@@ -11,12 +12,27 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class StudentDao {
     // Visa alla studenter
+
     public void showAllStudents() {
         Main.inTransaction(EntityManager-> {
             TypedQuery<Student> query = EntityManager.createQuery("SELECT s FROM Student s", Student.class);
             List<Student> students = query.getResultList();
             students.forEach(System.out::println);
         });
+    }
+
+    //Using dto to show only name and age:
+    public void showAllStudentsWithDto(){
+        EntityManager em = JPAUtil.getEntityManager();
+
+        var query = em.createQuery("""
+                select new StudentDto(s.studentName, s.studentAge) from Student s
+                """, StudentDto.class);
+        var students = query.getResultList();
+
+        students.forEach(System.out::println);
+        em.close();
+
     }
 
 
@@ -31,7 +47,6 @@ public class StudentDao {
             return null; // or alternatively, you can throw a custom exception
         }
     }
-
 
     // TODO: Show all test for one student
 
