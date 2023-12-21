@@ -23,6 +23,8 @@ public class Main {
         var planetsMenu = new Menu("Planets");
         var solarSystemMenu = new Menu("Solar Systems");
         var studentMenu = new Menu("Students");
+        var viewStudentMenu = new Menu("View students");
+        var statisticsMenu = new Menu("Statistics");
         var testsMenu = new Menu("Tests");
 
         planetsMenu.addMenuItem("Show all planets", planetDao::showAllPlanets);
@@ -43,13 +45,18 @@ public class Main {
         solarSystemMenu.addMenuItem("Insert solar systems", solarSystemDao::insertSolarSystemInput);
         solarSystemMenu.addMenuItem("Count solar systems", () -> System.out.println("The number of solar systems are " + solarSystemDao.countSolarSystems()));
 
-        studentMenu.addMenuItem("Show all students", studentDao::showAllStudents);
-        studentMenu.addMenuItem("Find student", () -> System.out.println(studentDao.findStudent(InputReader.inputString("Enter the students name: "))));
-        studentMenu.addMenuItem("Show all tests from one Student", () -> studentDao.getAllTestsOfOneStudent(InputReader.inputString("Enter the Students id:")));
+
+        studentMenu.addMenuItem("View students", viewStudentMenu::displayMenu);
         studentMenu.addMenuItem("Insert students", studentDao::insertStudentInput);
         studentMenu.addMenuItem("Update student", studentDao::updateStudentInput);
         studentMenu.addMenuItem("Delete student", () -> studentDao.deleteStudent(InputReader.inputString("Enter the name of the student to delete:")));
-        studentMenu.addMenuItem("Statistics", studentDao::studentStatistics);
+        studentMenu.addMenuItem("Statistics", statisticsMenu::displayMenu);
+
+        viewStudentMenu.addMenuItem("Show all students", studentDao::showAllStudents);
+        viewStudentMenu.addMenuItem("Find student", () -> System.out.println(studentDao.findStudent(InputReader.inputString("Enter the students name: "))));
+        viewStudentMenu.addMenuItem("Show all tests from one Student", () -> studentDao.getAllTestsOfOneStudent(InputReader.inputString("Enter the Students id:")));
+
+        statisticsMenu.addMenuItem("Statistics", studentDao::studentStatistics);
 
         testsMenu.addMenuItem("Show all tests", testsDao::showAllTests);
         testsMenu.addMenuItem("Add test", testsDao::insertTestInput);

@@ -49,9 +49,9 @@ public class StudentDao {
         }
     }
 
-    // TODO: Show all test for one student
-    public void getAllTestsOfOneStudent(String id) {
 
+    public void getAllTestsOfOneStudent(String id) {
+        // TODO: search on socSecNumber
         EntityManager em = JPAUtil.getEntityManager();
             Student student = em.find(Student.class, id);
             System.out.println(student.getStudentName());
