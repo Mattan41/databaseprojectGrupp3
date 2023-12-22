@@ -13,7 +13,39 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class StudentDao {
-    // Visa alla studenter
+
+    //Create - add student
+    public void insertStudentInput() {
+
+        var studentSocSecNr = InputReader.inputInt("Enter the students Social Security Number: ");
+        if (checkIfStudentExist(studentSocSecNr)) return;
+        var studentName = InputReader.inputString("Enter the students name: ");
+        var studentAge = InputReader.inputInt("Enter the students Age: ");
+        var totResult = InputReader.inputDouble("Enter the students total Score: ");
+
+        insertStudent(studentName, studentAge, studentSocSecNr, totResult);
+    }
+    private static boolean checkIfStudentExist(int studentSocSecNr) {
+        if(studentIdExist(studentSocSecNr)){
+            System.out.println("Student already in database");
+            return true;
+        }
+        return false;
+    }
+    private static void insertStudent(String studentName, int studentAge, int studentSocSecNr, double totResult) {
+        Main.inTransaction(EntityManager -> {
+            Student student = new Student();
+            student.setStudentName(studentName);
+            student.setStudentAge(studentAge);
+            student.setStudentSocialSecNum(studentSocSecNr);
+            student.setTotResult(totResult);
+            EntityManager.persist(student);
+        });
+    }
+
+
+
+    // READ - show students
 
     public void showAllStudents() {
         Main.inTransaction(EntityManager-> {
@@ -54,7 +86,7 @@ public class StudentDao {
     public void getAllTestsOfOneStudent(int studentSocSecNum) {
 
         if (!studentIdExist(studentSocSecNum)){
-            System.out.println("Student does not exist.");
+            System.out.println("Student does not exist in database.");
             return;}
 
         Main.inTransaction(EntityManager -> {
@@ -65,26 +97,7 @@ public class StudentDao {
         });
     }
 
-    public void insertStudentInput() {
 
-        var studentName = InputReader.inputString("Enter the students name: ");
-        var studentSocSecNr = InputReader.inputInt("Enter the students Social Security Number: ");
-        var studentAge = InputReader.inputInt("Enter the students Age: ");
-        var totResult = InputReader.inputDouble("Enter the students total Score: ");
-
-        insertStudent(studentName, studentAge, studentSocSecNr, totResult);
-    }
-
-    private static void insertStudent(String studentName, int studentAge, int studentSocSecNr, double totResult) {
-        Main.inTransaction(EntityManager -> {
-            Student student = new Student();
-            student.setStudentName(studentName);
-            student.setStudentAge(studentAge);
-            student.setStudentSocialSecNum(studentSocSecNr);
-            student.setTotResult(totResult);
-            EntityManager.persist(student);
-        });
-    }
     public void updateStudentInput() {
         var currentName = InputReader.inputString("Enter the name of the student you want to update:");
         var currentSocSecNum = InputReader.inputInt("Enter the social security number of the student:");
@@ -216,14 +229,6 @@ public class StudentDao {
 
     }
 
-    private static Student getStudentFromSocSecNum(EntityManager entityManager, int studentSocSecNum) {
-        TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s WHERE s.studentSocialSecNum = :studentSocSecNum", Student.class);
-        query.setParameter("studentSocSecNum", studentSocSecNum);
-
-        Student student = query.getSingleResult();
-        return student;
-    }
-
 
     public void avgScorePerTestForStudentsIntervalInput() {
         int minAge = InputReader.inputInt("enter minimum age: ");
@@ -250,13 +255,18 @@ public class StudentDao {
 
                     sum += testScore;
                     count++;
-
-
                 }
             }
             average = sum / count;
             System.out.println("Average score for students age " + minAge + " to " + maxAge + " is: " + average);
         });
+    }
+
+    private static Student getStudentFromSocSecNum(EntityManager entityManager, int studentSocSecNum) {
+        TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s WHERE s.studentSocialSecNum = :studentSocSecNum", Student.class);
+        query.setParameter("studentSocSecNum", studentSocSecNum);
+
+        return query.getSingleResult();
     }
 
 }
