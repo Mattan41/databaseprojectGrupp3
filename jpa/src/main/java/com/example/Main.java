@@ -49,7 +49,7 @@ public class Main {
         studentMenu.addMenuItem("View students", viewStudentMenu::displayMenu);
         studentMenu.addMenuItem("Insert students", studentDao::insertStudentInput);
         studentMenu.addMenuItem("Update student", studentDao::updateStudentInput);
-        studentMenu.addMenuItem("Delete student", () -> studentDao.deleteStudent(InputReader.inputString("Enter the name of the student to delete:")));
+        studentMenu.addMenuItem("Delete student", () -> studentDao.deleteStudent(InputReader.inputInt("enter the students social security number:")));
         studentMenu.addMenuItem("Statistics", statisticsMenu::displayMenu);
 
         viewStudentMenu.addMenuItem("Show all students", studentDao::showAllStudents);
@@ -57,7 +57,7 @@ public class Main {
         viewStudentMenu.addMenuItem("Show all tests from one Student", () -> studentDao.getAllTestsOfOneStudent(InputReader.inputInt("Enter the Students Social security number:")));
 
         statisticsMenu.addMenuItem("Statistics", studentDao::studentStatistics);
-        statisticsMenu.addMenuItem("Show average score per test for one student", () -> studentDao.studentAvgScorePerTestInput(InputReader.inputString("Enter the students name: ")));
+        statisticsMenu.addMenuItem("Show average score per test for one student", () -> studentDao.studentAvgScorePerTestInput(InputReader.inputInt("Enter the students social security number: ")));
         statisticsMenu.addMenuItem("Show average score for students at age interval: ", studentDao::avgScorePerTestForStudentsIntervalInput);
 
 

@@ -83,11 +83,10 @@ public class StudentDao {
 
 
     public void updateStudentInput() {
-        var currentName = InputReader.inputString("Enter the name of the student you want to update:");
         var currentSocSecNum = InputReader.inputInt("Enter the social security number of the student:");
 
         if (!studentIdExist(currentSocSecNum)) {
-            System.out.println("Student " + currentName + " does not exist in database.");
+            System.out.println("Student does not exist in database.");
             return;
         }
 
@@ -95,36 +94,36 @@ public class StudentDao {
         var studentSocSecNr = InputReader.inputInt("Enter the students Social Security Number: ");
         var studentAge = InputReader.inputInt("Enter the students Age: ");
         var totResult = InputReader.inputDouble("Enter the students total Score: ");
-        updateStudent(currentName, currentSocSecNum, studentName, studentSocSecNr, studentAge,totResult);
+        updateStudent(currentSocSecNum, studentName, studentSocSecNr, studentAge,totResult);
     }
 
-    public void updateStudent(String currentName, int studentSocSecNum, String studentName, int studentSocSecNr, int studentAge, double totResult) {
+    public void updateStudent(int studentSocSecNum, String studentName, int studentSocSecNr, int studentAge, double totResult) {
         Main.inTransaction(entityManager -> {
             TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s WHERE s.studentSocialSecNum = :studentSocialSecNum", Student.class);
             query.setParameter("studentSocialSecNum", studentSocSecNum);
             Student student = query.getSingleResult();
+            String formerName = student.getStudentName();
             student.setStudentName(studentName);
             student.setStudentSocialSecNum(studentSocSecNr);
             student.setStudentAge(studentAge);
             student.setTotResult(totResult);
             entityManager.merge(student);
-            System.out.println("Student " + currentName + " updated to [name:" + studentName + " social sec num:" + studentSocSecNr + " age:" + studentAge + " total result:" + totResult + "]");
+            System.out.println("Student " + formerName + " updated to [name:" + studentName + ", Social security number:" + studentSocSecNr + ", Age:" + studentAge + ", Total result:" + totResult + "]");
         });
     }
 
-    public void deleteStudent(String studentName) {
-        if (studentNameExist(studentName)) {
-            int studentSocSecNum = InputReader.inputInt("enter the students social security number:");
+    public void deleteStudent(int studentSocSecNum) {
+
             if (!studentIdExist(studentSocSecNum)){
-                System.out.println("Student " + studentName + " does not exist in database.");
+                System.out.println("Student does not exist in database.");
             return;}
             Main.inTransaction(entityManager -> {
 
                 Student student = getStudentFromSocSecNum(entityManager, studentSocSecNum);
                 entityManager.remove(student);
-                System.out.println("Student " + studentName + " is deleted!");
+                System.out.println("Student " + student.getStudentName() + " is deleted!");
             });
-        } else System.out.println("Student " + studentName + " does not exist in database.");
+
     }
 
     //Statistics
@@ -168,14 +167,12 @@ public class StudentDao {
         }
     }
 
-    public void studentAvgScorePerTestInput(String studentName) {
-        if (studentNameExist(studentName)) {
-            int studentSocSecNum = InputReader.inputInt("enter the students social security number:");
-            if (!studentIdExist(studentSocSecNum)){
-                System.out.println("Student " + studentName + " does not exist.");
+    public void studentAvgScorePerTestInput(int studentSocSecNum) {
+        if (!studentIdExist(studentSocSecNum)){
+                System.out.println("Student does not exist in database.");
                 return;}
             studentAvgScorePerTest(studentSocSecNum);
-        } else System.out.println("Student " + studentName + " does not exist.");
+
 
     }
     private static void studentAvgScorePerTest(int studentSocSecNum) {
