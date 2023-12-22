@@ -198,13 +198,9 @@ public class StudentDao {
         Main.inTransaction(entityManager -> {
 
             Student student = getStudentFromSocSecNum(entityManager, studentSocSecNum);
-            Set<Test> tests = student.getTests();
+            double averageTestScore = getAverageTestScore(student);
 
-            for (Test test : tests) {
-                double testScore = test.getTestScore();
-                String testName = test.getTestName();
-                System.out.println("Average score for " + testName + " is " + testScore);
-            }
+            System.out.println("Average score per test for " + student.getStudentName() + " is: " + averageTestScore );
         });
     }
     public void avgScorePerTestForStudentsIntervalInput() {
@@ -221,24 +217,38 @@ public class StudentDao {
 
             List<Student> students = query.getResultList();
 
-            double average = 0;
-            double sum = 0;
-            int count = 0;
-            for (Student student : students) {
-                Set<Test> tests = student.getTests();
-                for (Test test : tests) {
-                    double testScore = test.getTestScore();
+            double averageScoreTotal = getAverageScoreTotal(students);
 
-                    sum += testScore;
-                    count++;
-                }
-            }
-            average = sum / count;
-            System.out.println("Average score for students age " + minAge + " to " + maxAge + " is: " + average);
+            System.out.println("Average score for students age " + minAge + " - " + maxAge + " is: " + averageScoreTotal);
         });
     }
 
-    //
+    private static double getAverageScoreTotal(List<Student> students) {
+        double averageScoreForStudents = 0;
+        int countStudents = 0;
+        for (Student student : students) {
+
+            double average = getAverageTestScore(student);
+            averageScoreForStudents += average;
+            countStudents++;
+        }
+
+        return averageScoreForStudents / countStudents;
+    }
+    private static double getAverageTestScore(Student student) {
+        Set<Test> tests = student.getTests();
+        int count = 0;
+        double testScore = 0;
+
+        for (Test test : tests) {
+            testScore += test.getTestScore();
+            count++;
+
+        }
+        return testScore / count;
+    }
+
+    //misc
     public static boolean studentNameExist(String studentName) {
         AtomicBoolean exit = new AtomicBoolean(false);
         Main.inTransaction(entityManager -> {
