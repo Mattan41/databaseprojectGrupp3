@@ -35,6 +35,13 @@ INSERT INTO test (testName, testScore, studentTestId) VALUES ('Chemistry', 91.2,
 INSERT INTO test (testName, testScore, studentTestId) VALUES ('Mathematics', 95.0, 1);
 INSERT INTO test (testName, testScore, studentTestId) VALUES ('planet size', 100.0, 4);
 
+INSERT INTO test (testName, testScore, studentTestId) VALUES ('Psychics', 59.5, 2);
+INSERT INTO test (testName, testScore, studentTestId) VALUES ('Chem', 51.2, 3);
+INSERT INTO test (testName, testScore, studentTestId) VALUES ('Math', 105.0, 1);
+INSERT INTO test (testName, testScore, studentTestId) VALUES ('planet temp', 10.0, 4);
+
+
+
 -- read
 SELECT * FROM planet;
 SELECT * FROM moon;

@@ -1,7 +1,6 @@
 package com.example.entities;
 
 import jakarta.persistence.*;
-
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -25,9 +24,9 @@ public class Student {
 
     @Column(name = "totResult")
     private Double totResult;
-
-    @OneToMany(mappedBy = "studentTest")
+    @OneToMany(mappedBy = "studentTest", cascade = CascadeType.ALL)
     private Set<Test> tests = new LinkedHashSet<>();
+
 
     public Integer getId() {
         return id;
@@ -77,8 +76,12 @@ public class Student {
         this.tests = tests;
     }
 
+
     @Override
     public String toString() {
-        return studentName;
+        return "\n" + "Student: " + studentName +
+               ", Social security Number: " + studentSocialSecNum +
+               ", studentAge:" + studentAge;
+
     }
 }
