@@ -103,10 +103,9 @@ public class StudentDao {
         var currentSocSecNum = InputReader.inputInt("Enter the social security number of the student:");
 
         if (!studentIdExist(currentSocSecNum)) {
-            System.out.println("Student " + currentName + " does not exist.");
+            System.out.println("Student " + currentName + " does not exist in database.");
             return;
         }
-
 
         var studentName = InputReader.inputString("Enter the students name: ");
         var studentSocSecNr = InputReader.inputInt("Enter the students Social Security Number: ");
@@ -130,10 +129,10 @@ public class StudentDao {
     }
 
     public void deleteStudent(String studentName) {
-        if (studentExist(studentName)) {
+        if (studentNameExist(studentName)) {
             int studentSocSecNum = InputReader.inputInt("enter the students social security number:");
             if (!studentIdExist(studentSocSecNum)){
-                System.out.println("Student " + studentName + " does not exist.");
+                System.out.println("Student " + studentName + " does not exist in database.");
             return;}
             Main.inTransaction(entityManager -> {
 
@@ -141,33 +140,10 @@ public class StudentDao {
                 entityManager.remove(student);
                 System.out.println("Student " + studentName + " is deleted!");
             });
-        } else System.out.println("Student " + studentName + " does not exist.");
+        } else System.out.println("Student " + studentName + " does not exist in database.");
     }
 
-    public static boolean studentExist(String studentName) {
-        AtomicBoolean exit = new AtomicBoolean(false);
-        Main.inTransaction(entityManager -> {
-            TypedQuery<Long> countQuery = entityManager.createQuery("SELECT COUNT(s) FROM Student s WHERE s.studentName = :studentName", Long.class);
-            countQuery.setParameter("studentName", studentName);
-            long count = countQuery.getSingleResult();
-            exit.set(count > 0);
-        });
-        return exit.get();
-    }
-
-    public static boolean studentIdExist(int studentSocSecNum) {
-        AtomicBoolean exit = new AtomicBoolean(false);
-        Main.inTransaction(entityManager -> {
-            TypedQuery<Long> countQuery = entityManager.createQuery("SELECT COUNT(s) FROM Student s WHERE s.studentSocialSecNum = :studentSocSecNum", Long.class);
-            countQuery.setParameter("studentSocSecNum", studentSocSecNum);
-            long count = countQuery.getSingleResult();
-            exit.set(count > 0);
-        });
-        return exit.get();
-    }
-
-
-
+    //Statistics
     public void studentStatistics() {
         EntityManager em = JPAUtil.getEntityManager();
 
@@ -177,7 +153,7 @@ public class StudentDao {
             Query avgStudentScoreQuery = em.createQuery("SELECT AVG(s.totResult) FROM Student s");
             Double averageStudentScore = (Double) avgStudentScoreQuery.getSingleResult();
             System.out.println("Average student score: " + averageStudentScore);
-            
+
             // student with the lowest score
             Query lowestScoreStudentQuery = em.createQuery("SELECT s FROM Student s WHERE s.totResult = (SELECT MIN(s2.totResult) FROM Student s2)");
             Student lowestScoreStudent = (Student) lowestScoreStudentQuery.getSingleResult();
@@ -208,34 +184,34 @@ public class StudentDao {
         }
     }
 
-    public void studentAvgScorePerTest(String studentName) {
-        if (studentExist(studentName)) {
+    public void studentAvgScorePerTestInput(String studentName) {
+        if (studentNameExist(studentName)) {
             int studentSocSecNum = InputReader.inputInt("enter the students social security number:");
             if (!studentIdExist(studentSocSecNum)){
                 System.out.println("Student " + studentName + " does not exist.");
                 return;}
-            Main.inTransaction(entityManager -> {
-
-                Student student = getStudentFromSocSecNum(entityManager, studentSocSecNum);
-                Set<Test> tests = student.getTests();
-
-                for (Test test : tests) {
-                    double testScore = test.getTestScore();
-                    String testName = test.getTestName();
-                    System.out.println("Average score for " + testName + " is " + testScore);
-                }
-            });
+            studentAvgScorePerTest(studentSocSecNum);
         } else System.out.println("Student " + studentName + " does not exist.");
 
     }
+    private static void studentAvgScorePerTest(int studentSocSecNum) {
+        Main.inTransaction(entityManager -> {
 
+            Student student = getStudentFromSocSecNum(entityManager, studentSocSecNum);
+            Set<Test> tests = student.getTests();
 
+            for (Test test : tests) {
+                double testScore = test.getTestScore();
+                String testName = test.getTestName();
+                System.out.println("Average score for " + testName + " is " + testScore);
+            }
+        });
+    }
     public void avgScorePerTestForStudentsIntervalInput() {
         int minAge = InputReader.inputInt("enter minimum age: ");
         int maxAge = InputReader.inputInt("enter maximum age: ");
         avgScorePerTestForStudentsInterval(minAge, maxAge);
     }
-
     private void avgScorePerTestForStudentsInterval(int minAge, int maxAge) {
 
         Main.inTransaction(entityManager -> {
@@ -262,11 +238,31 @@ public class StudentDao {
         });
     }
 
+    //
+    public static boolean studentNameExist(String studentName) {
+        AtomicBoolean exit = new AtomicBoolean(false);
+        Main.inTransaction(entityManager -> {
+            TypedQuery<Long> countQuery = entityManager.createQuery("SELECT COUNT(s) FROM Student s WHERE s.studentName = :studentName", Long.class);
+            countQuery.setParameter("studentName", studentName);
+            long count = countQuery.getSingleResult();
+            exit.set(count > 0);
+        });
+        return exit.get();
+    }
+    public static boolean studentIdExist(int studentSocSecNum) {
+        AtomicBoolean exit = new AtomicBoolean(false);
+        Main.inTransaction(entityManager -> {
+            TypedQuery<Long> countQuery = entityManager.createQuery("SELECT COUNT(s) FROM Student s WHERE s.studentSocialSecNum = :studentSocSecNum", Long.class);
+            countQuery.setParameter("studentSocSecNum", studentSocSecNum);
+            long count = countQuery.getSingleResult();
+            exit.set(count > 0);
+        });
+        return exit.get();
+    }
     private static Student getStudentFromSocSecNum(EntityManager entityManager, int studentSocSecNum) {
         TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s WHERE s.studentSocialSecNum = :studentSocSecNum", Student.class);
         query.setParameter("studentSocSecNum", studentSocSecNum);
 
         return query.getSingleResult();
     }
-
 }
