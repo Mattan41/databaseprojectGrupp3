@@ -3,7 +3,6 @@ package com.example.dao;
 import com.example.JPAUtil;
 import com.example.Main;
 import com.example.entities.Student;
-import com.example.dtos.StudentDto;
 import com.example.entities.Test;
 import com.example.util.InputReader;
 import jakarta.persistence.*;
@@ -54,21 +53,6 @@ public class StudentDao {
             students.forEach(System.out::println);
         });
     }
-
-    //Using dto to show only name and age:
-    public void showAllStudentsDto(){
-        EntityManager em = JPAUtil.getEntityManager();
-
-        var query = em.createQuery("""
-                select new StudentDto(s.studentName, s.studentAge) from Student s
-                """, StudentDto.class);
-        var students = query.getResultList();
-
-        students.forEach(System.out::println);
-        em.close();
-
-    }
-
 
     public List<Student> findStudent(String studentName) {
         try (EntityManager em = JPAUtil.getEntityManager()) {
