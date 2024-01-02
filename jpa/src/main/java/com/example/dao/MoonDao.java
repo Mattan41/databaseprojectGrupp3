@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MoonDao {
 
@@ -20,22 +20,33 @@ public class MoonDao {
                 TypedQuery<Moon> query = EntityManager.createQuery("SELECT m FROM Moon m", Moon.class);
                 List<Moon> moons = query.getResultList();
                 moons.forEach(System.out::println);
-            }catch (Exception e) {throw e;}
+            } catch (Exception e) {
+                throw e;
+            }
         });
     }
 
     public void insertMoonInput() {
+        var planetId = InputReader.inputInt("Enter the planet id that the new moon belongs to: ");
 
-        var moonName = InputReader.inputString("Enter moon to add: ");
-        if (moonExist(moonName)) {
-            System.out.println(moonName + " already in database");
+        if (!planetExist(planetId)) {
+            System.out.println("Planet with ID " + planetId + " does not exist in the database.");
             return;
         }
 
-        Double moonSize = InputReader.inputDouble("Enter moon size");
-        var planetId = InputReader.inputInt("Enter planetId: ");
+        var moonName = InputReader.inputString("Enter moon name to add: ");
+        Double moonSize = InputReader.inputDouble("Enter moon size: ");
 
         insertMoon(moonName, moonSize, planetId);
+    }
+
+    private boolean planetExist(int planetId) {
+        AtomicBoolean exists = new AtomicBoolean(false);
+        Main.inTransaction(entityManager -> {
+            Planet planet = entityManager.find(Planet.class, planetId);
+            exists.set(planet != null);
+        });
+        return exists.get();
     }
 
     private static void insertMoon(String moonName, Double moonSize, int planetId) {
@@ -48,7 +59,6 @@ public class MoonDao {
             System.out.println("Moon " + moonName + " added to the database!");
         });
     }
-
 
     public static boolean moonExist(String moonName) {
         AtomicBoolean exit = new AtomicBoolean();
@@ -84,11 +94,13 @@ public class MoonDao {
                 moon.setPlanetId(planetId);
                 entityManager.merge(moon);
                 System.out.println("Moon " + currentName + " updated to [name:" + newName + " size:" + newSize + "]");
-            } catch (Exception e) {throw e;}
+            } catch (Exception e) {
+                throw e;
+            }
         });
     }
 
-    public void deleteMoon(String  moonName) {
+    public void deleteMoon(String moonName) {
         if (moonExist(moonName)) {
             Main.inTransaction(entityManager -> {
                 try {
@@ -97,7 +109,9 @@ public class MoonDao {
                     Moon moon = query.getSingleResult();
                     entityManager.remove(moon);
                     System.out.println("The moon " + moonName + " is deleted!");
-                } catch (Exception e) {throw e;}
+                } catch (Exception e) {
+                    throw e;
+                }
             });
         } else System.out.println("Moon " + moonName + " does not exist.");
     }
@@ -138,6 +152,32 @@ public class MoonDao {
             System.err.println("Error occurred while generating moon statistics: " + e.getMessage());
         } finally {
             em.close();
+        }
+    }
+
+
+    // Find one moon and return it as a record. Here in this console app I have overridden the toString to make a nice print to the console.
+    public MoonRecord findAMoon(String moonName) {
+        AtomicReference<MoonRecord> moonRecordRef = new AtomicReference<>();
+        Main.inTransaction(entityManager -> {
+            TypedQuery<Moon> query = entityManager.createQuery("SELECT m FROM Moon m WHERE m.name = :moonName", Moon.class);
+            query.setParameter("moonName", moonName);
+            Moon moon = query.getSingleResult();
+
+            if (moon != null) {
+                MoonRecord moonRecord = new MoonRecord(moon.getName(), moon.getSize(), moon.getPlanetId());
+                moonRecordRef.set(moonRecord);
+            }
+        });
+
+        return moonRecordRef.get();
+    }
+
+    // Record for displaying a moon
+    public record MoonRecord(String name, Double size, int planetId) {
+        @Override
+        public String toString() {
+            return "Moon: name= %s, size= %s, planetId= %d".formatted(name, size, planetId);
         }
     }
 }
