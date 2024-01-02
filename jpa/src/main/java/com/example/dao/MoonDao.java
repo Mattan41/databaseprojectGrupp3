@@ -24,11 +24,6 @@ public class MoonDao {
         });
     }
 
-
-    private static void handleException(Exception e) {
-        e.printStackTrace();
-    }
-
     public void insertMoonInput() {
 
         var moonName = InputReader.inputString("Enter moon to add: ");
@@ -45,14 +40,12 @@ public class MoonDao {
 
     private static void insertMoon(String moonName, Double moonSize, int planetId) {
         Main.inTransaction(entityManager -> {
-            try {
-                Moon moon = new Moon();
-                moon.setName(moonName);
-                moon.setSize(moonSize);
-                moon.setPlanetId(planetId);
-                entityManager.persist(moon);
-                System.out.println("Moon " + moonName + " added to the database!");
-            }catch (Exception e) {throw e;}
+            Moon moon = new Moon();
+            moon.setName(moonName);
+            moon.setSize(moonSize);
+            moon.setPlanetId(planetId);
+            entityManager.persist(moon);
+            System.out.println("Moon " + moonName + " added to the database!");
         });
     }
 
