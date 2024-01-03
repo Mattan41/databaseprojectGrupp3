@@ -161,19 +161,37 @@ public class MoonDao {
 
 
     // Find one moon and return it as a record. Here in this console app I have overridden the toString to make a nice print to the console.
+//    public MoonRecord findAMoon(String moonName) {
+//        AtomicReference<MoonRecord> moonRecordRef = new AtomicReference<>();
+//        Main.inTransaction(entityManager -> {
+//            TypedQuery<Moon> query = entityManager.createQuery("SELECT m FROM Moon m WHERE m.name = :moonName", Moon.class);
+//            query.setParameter("moonName", moonName);
+//            Moon moon = query.getSingleResult();
+//
+//            if (moon != null) {
+//                MoonRecord moonRecord = new MoonRecord(moon.getName(), moon.getSize(), moon.getPlanetId());
+//                moonRecordRef.set(moonRecord);
+//            }
+//        });
+//
+//        return moonRecordRef.get();
+//    }
+
     public MoonRecord findAMoon(String moonName) {
         AtomicReference<MoonRecord> moonRecordRef = new AtomicReference<>();
         Main.inTransaction(entityManager -> {
-            TypedQuery<Moon> query = entityManager.createQuery("SELECT m FROM Moon m WHERE m.name = :moonName", Moon.class);
-            query.setParameter("moonName", moonName);
-            Moon moon = query.getSingleResult();
+            try {
+                TypedQuery<Moon> query = entityManager.createQuery("SELECT m FROM Moon m WHERE m.name = :moonName", Moon.class);
+                query.setParameter("moonName", moonName);
+                Moon moon = query.getSingleResult();
 
-            if (moon != null) {
                 MoonRecord moonRecord = new MoonRecord(moon.getName(), moon.getSize(), moon.getPlanetId());
                 moonRecordRef.set(moonRecord);
+            } catch (NoResultException e) {
+                moonRecordRef.set(null); // Set to null if no moon is found
+                System.out.print("The moon with name " + moonName + " was ");
             }
         });
-
         return moonRecordRef.get();
     }
 
