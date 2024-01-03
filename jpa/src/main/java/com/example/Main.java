@@ -31,7 +31,7 @@ public class Main {
         planetsMenu.addMenuItem("Find a planet", () -> System.out.println(planetDao.findPlanet(InputReader.inputString("Enter planet name: "))));
         planetsMenu.addMenuItem("Insert planet", planetDao::insertPlanetInput);
         planetsMenu.addMenuItem("Show the moons of a planet", () -> planetDao.getMoonsOfPlanet(InputReader.inputString("Enter planet name:")));
-        planetsMenu.addMenuItem("Delete planet", () -> planetDao.deletePlanet(InputReader.inputString("Enter the name of planet to delete: ")));
+        planetsMenu.addMenuItem("Delete planet", () -> planetDao.deleteMoonsOfOnePlanet(InputReader.inputString("Enter the name of planet to delete: ")));
         planetsMenu.addMenuItem("Update planet", planetDao::updatePlanetInput);
         planetsMenu.addMenuItem("Statistics", planetDao::planetStatistics);
 

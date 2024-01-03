@@ -1,6 +1,7 @@
 package com.example.dao;
 
 import com.example.JPAUtil;
+import com.example.Main;
 import com.example.entities.Moon;
 import com.example.entities.Planet;
 import com.example.util.InputReader;
@@ -104,6 +105,26 @@ public class PlanetDao {
         em.close();
     }
 
+    public void deleteMoonsOfOnePlanet(String planetName) {
+        if (!planetExist(planetName)){
+            System.out.println(planetName + " is not in the database");
+            return;
+        }
+        Main.inTransaction(entityManager ->{
+            TypedQuery<Moon> queryMoon = entityManager.createQuery(
+                    "SELECT m FROM Moon m INNER JOIN Planet p ON m.planetId = p.id WHERE p.planetName = :planetName", Moon.class);
+            queryMoon.setParameter("planetName", planetName);
+
+            List<Moon> moons = queryMoon.getResultList();
+
+            for (Moon moon : moons) {
+                entityManager.remove(moon);
+            }
+        });
+
+        deletePlanet(planetName);
+
+    }
     public void deletePlanet(String planetName) {
 
         EntityTransaction transaction = null;
