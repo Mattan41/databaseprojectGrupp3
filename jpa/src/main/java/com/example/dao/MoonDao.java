@@ -37,6 +37,10 @@ public class MoonDao {
         var moonName = InputReader.inputString("Enter moon name to add: ");
         Double moonSize = InputReader.inputDouble("Enter moon size: ");
 
+        if (moonExist(moonName)) {
+            System.out.println(moonName + " already exists i database.");
+            return;
+        }
         insertMoon(moonName, moonSize, planetId);
     }
 
